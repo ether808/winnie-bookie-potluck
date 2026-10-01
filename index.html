@@ -334,13 +334,16 @@
    * WINNIE × BOOKIE
    * THE WEEKLY POTLUCK
    *
-   * Game rules:
-   * - One ingredient per week
-   * - Both people cook
-   * - The spinner alternates between Winnie and Bookie
-   * - The ingredient is determined by the weekly seed
-   * - Once revealed, there are no rerolls
+   * Shared version:
+   * Supabase stores the official weekly challenge.
    */
+
+  const SUPABASE_URL =
+    "https://mywlgfewdsitobzzbxbj.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_t0jIfQXkVWW5sQRWVmGUlQ_JeuYAExW";
+
 
   const ingredients = [
 
@@ -453,19 +456,49 @@
     "Puff Pastry",
     "Bread",
     "Polenta"
+
   ];
 
-
-  /*
-   * OFFICIAL START DATE
-   */
 
   const startDate =
     new Date("2026-10-04T00:00:00");
 
 
   /*
-   * GET THE CURRENT WEEK
+   * SUPABASE REQUEST HELPER
+   */
+
+  async function supabaseRequest(
+    endpoint,
+    options = {}
+  ) {
+
+    const response =
+      await fetch(
+        SUPABASE_URL +
+        "/rest/v1/" +
+        endpoint,
+        {
+          ...options,
+
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization":
+              "Bearer " + SUPABASE_KEY,
+            "Content-Type":
+              "application/json",
+            ...(options.headers || {})
+          }
+        }
+      );
+
+    return response;
+
+  }
+
+
+  /*
+   * CURRENT WEEK
    */
 
   function getWeekStart() {
@@ -478,22 +511,21 @@
 
     const day = today.getDay();
 
-    const sunday = new Date(today);
+    const sunday =
+      new Date(today);
 
     sunday.setDate(
       today.getDate() - day
     );
 
-    sunday.setHours(0, 0, 0, 0);
+    sunday.setHours(
+      0, 0, 0, 0
+    );
 
     return sunday;
 
   }
 
-
-  /*
-   * WORK OUT WHICH POTLUCK WEEK WE ARE IN
-   */
 
   function getWeekNumber(date) {
 
@@ -516,73 +548,25 @@
 
 
   /*
-   * DETERMINISTIC RANDOM NUMBER
+   * WHO GETS TO SPIN?
    *
-   * This means the same week always
-   * produces the same ingredient.
-   *
-   * This is our temporary system while
-   * we build the shared database.
-   */
-
-  function seededRandom(seed) {
-
-    let x =
-      Math.sin(seed) * 10000;
-
-    return x - Math.floor(x);
-
-  }
-
-
-  /*
-   * GET THIS WEEK'S INGREDIENT
-   */
-
-  function getIngredient(weekNumber) {
-
-    const randomNumber =
-      seededRandom(
-        weekNumber * 9301 + 49297
-      );
-
-    const index =
-      Math.floor(
-        randomNumber *
-        ingredients.length
-      );
-
-    return ingredients[index];
-
-  }
-
-
-  /*
-   * WORK OUT WHO GETS TO SPIN
-   *
-   * Week 0 = Bookie
-   * Week 1 = Winnie
-   * Week 2 = Bookie
-   * Week 3 = Winnie
+   * Week 1 = Bookie
+   * Week 2 = Winnie
+   * Week 3 = Bookie
+   * etc.
    */
 
   function getSpinner(weekNumber) {
 
-    if (weekNumber % 2 === 0) {
-
-      return "Bookie";
-
-    } else {
-
-      return "Winnie";
-
-    }
+    return weekNumber % 2 === 0
+      ? "Bookie"
+      : "Winnie";
 
   }
 
 
   /*
-   * FORMAT DATES
+   * DATE FORMATTING
    */
 
   function formatDate(date) {
@@ -626,16 +610,133 @@
 
 
   /*
-   * SHOW WHO SPINS
+   * RANDOM INGREDIENT
+   */
+
+  function chooseIngredient() {
+
+    const index =
+      Math.floor(
+        Math.random() *
+        ingredients.length
+      );
+
+    return ingredients[index];
+
+  }
+
+
+  /*
+   * GET THIS WEEK'S SAVED CHALLENGE
+   */
+
+  async function getCurrentChallenge() {
+
+    const weekNumber =
+      getWeekNumber(
+        getWeekStart()
+      );
+
+    const response =
+      await supabaseRequest(
+        "potluck_weeks" +
+        "?week_number=eq." +
+        weekNumber +
+        "&select=*"
+      );
+
+    if (!response.ok) {
+
+      console.error(
+        "Could not load challenge",
+        await response.text()
+      );
+
+      return null;
+
+    }
+
+    const data =
+      await response.json();
+
+    return data.length
+      ? data[0]
+      : null;
+
+  }
+
+
+  /*
+   * DISPLAY A SAVED CHALLENGE
+   */
+
+  function displayChallenge(
+    challenge
+  ) {
+
+    const ingredientElement =
+      document.getElementById(
+        "ingredient"
+      );
+
+    const descriptionElement =
+      document.getElementById(
+        "description"
+      );
+
+    const button =
+      document.getElementById(
+        "revealButton"
+      );
+
+    const lockedMessage =
+      document.getElementById(
+        "lockedMessage"
+      );
+
+
+    ingredientElement.textContent =
+      challenge.ingredient;
+
+
+    descriptionElement.textContent =
+      "Both of you cook. " +
+      "Anything goes — just make " +
+      challenge.ingredient.toLowerCase() +
+      " matter.";
+
+
+    button.textContent =
+      "🔒 INGREDIENT LOCKED";
+
+    button.disabled =
+      true;
+
+    button.style.opacity =
+      "0.55";
+
+    button.style.cursor =
+      "default";
+
+
+    lockedMessage.textContent =
+      "Spun by " +
+      challenge.spun_by +
+      ". No rerolls. Both of you are cooking this.";
+
+  }
+
+
+  /*
+   * SHOW WHO SHOULD SPIN
    */
 
   function showSpinner() {
 
-    const weekStart =
-      getWeekStart();
-
     const weekNumber =
-      getWeekNumber(weekStart);
+      getWeekNumber(
+        getWeekStart()
+      );
 
     const spinner =
       getSpinner(weekNumber);
@@ -654,19 +755,94 @@
 
 
   /*
-   * THE SPIN
+   * SAVE THE CHALLENGE TO SUPABASE
    */
 
-  function spinThePot() {
+  async function saveChallenge(
+    weekNumber,
+    ingredient,
+    spinner
+  ) {
 
-    const weekStart =
-      getWeekStart();
+    const response =
+      await supabaseRequest(
+        "potluck_weeks",
+        {
+          method: "POST",
 
-    const weekNumber =
-      getWeekNumber(weekStart);
+          headers: {
+            "Prefer":
+              "return=representation"
+          },
 
-    const ingredient =
-      getIngredient(weekNumber);
+          body: JSON.stringify({
+            week_number:
+              weekNumber,
+
+            start_date:
+              getWeekStart()
+                .toISOString()
+                .split("T")[0],
+
+            ingredient:
+              ingredient,
+
+            spun_by:
+              spinner,
+
+            spun_at:
+              new Date().toISOString()
+          })
+        }
+      );
+
+
+    /*
+     * If someone else spun at almost
+     * exactly the same time, the unique
+     * constraint prevents a duplicate.
+     *
+     * We then simply retrieve the
+     * existing challenge.
+     */
+
+    if (response.status === 409) {
+
+      return await getCurrentChallenge();
+
+    }
+
+
+    if (!response.ok) {
+
+      console.error(
+        "Could not save challenge",
+        await response.text()
+      );
+
+      return null;
+
+    }
+
+
+    const data =
+      await response.json();
+
+    return data[0];
+
+  }
+
+
+  /*
+   * SPIN THE POT
+   */
+
+  async function spinThePot() {
+
+    const button =
+      document.getElementById(
+        "revealButton"
+      );
 
     const ingredientElement =
       document.getElementById(
@@ -678,11 +854,6 @@
         "description"
       );
 
-    const button =
-      document.getElementById(
-        "revealButton"
-      );
-
     const box =
       document.getElementById(
         "ingredientBox"
@@ -690,26 +861,50 @@
 
 
     /*
-     * Disable the button while spinning.
+     * First check whether somebody
+     * has already spun.
      */
 
-    button.disabled = true;
+    const existing =
+      await getCurrentChallenge();
+
+
+    if (existing) {
+
+      displayChallenge(
+        existing
+      );
+
+      return;
+
+    }
+
+
+    const weekNumber =
+      getWeekNumber(
+        getWeekStart()
+      );
+
+    const spinner =
+      getSpinner(weekNumber);
+
+
+    button.disabled =
+      true;
 
     button.textContent =
       "🎲 SPINNING...";
 
 
     /*
-     * Ingredients shown during
-     * the animation.
+     * Animation
      */
 
-    let count = 0;
+    const spinDuration =
+      1800;
 
-    const spinDuration = 1600;
-
-    const intervalTime = 90;
-
+    const intervalTime =
+      90;
 
     const spinInterval =
       setInterval(() => {
@@ -723,30 +918,31 @@
         ingredientElement.textContent =
           ingredients[randomIndex];
 
-        count++;
-
       }, intervalTime);
 
 
     /*
-     * Stop the animation and reveal
-     * the official ingredient.
+     * Stop and save
      */
 
-    setTimeout(() => {
+    setTimeout(async () => {
 
       clearInterval(
         spinInterval
       );
 
+
+      const selectedIngredient =
+        chooseIngredient();
+
+
       ingredientElement.textContent =
-        ingredient;
+        selectedIngredient;
+
 
       descriptionElement.textContent =
-        "Both of you cook. " +
-        "Anything goes — just make " +
-        ingredient.toLowerCase() +
-        " matter.";
+        "Saving the official challenge...";
+
 
       box.classList.remove(
         "revealing"
@@ -759,26 +955,36 @@
       );
 
 
-      button.textContent =
-        "🔒 INGREDIENT LOCKED";
-
-      button.style.opacity =
-        "0.55";
-
-      button.style.cursor =
-        "default";
+      const challenge =
+        await saveChallenge(
+          weekNumber,
+          selectedIngredient,
+          spinner
+        );
 
 
-      document.getElementById(
-        "lockedMessage"
-      ).textContent =
-        "No rerolls. Both of you are cooking this.";
+      if (!challenge) {
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "🎲 TRY AGAIN";
+
+        descriptionElement.textContent =
+          "Something went wrong. The pot refused to cooperate.";
+
+        return;
+
+      }
 
 
-      saveReveal(
-        weekNumber,
-        ingredient
+      displayChallenge(
+        challenge
       );
+
+
+      await showHistory();
 
     }, spinDuration);
 
@@ -786,219 +992,129 @@
 
 
   /*
-   * SAVE THE REVEAL
-   *
-   * This is local for now.
-   * We'll replace this with a shared
-   * database in the next stage.
+   * LOAD HISTORY FROM SUPABASE
    */
 
-  function saveReveal(
-    weekNumber,
-    ingredient
-  ) {
-
-    const reveals =
-      JSON.parse(
-        localStorage.getItem(
-          "potluckReveals"
-        ) || "{}"
-      );
-
-    reveals[weekNumber] =
-      ingredient;
-
-    localStorage.setItem(
-      "potluckReveals",
-      JSON.stringify(
-        reveals
-      )
-    );
-
-  }
-
-
-  /*
-   * LOAD A PREVIOUSLY REVEALED
-   * INGREDIENT
-   */
-
-  function loadPreviousReveal() {
-
-    const weekStart =
-      getWeekStart();
-
-    const weekNumber =
-      getWeekNumber(
-        weekStart
-      );
-
-    const reveals =
-      JSON.parse(
-        localStorage.getItem(
-          "potluckReveals"
-        ) || "{}"
-      );
-
-
-    if (reveals[weekNumber]) {
-
-      const ingredient =
-        reveals[weekNumber];
-
-      document.getElementById(
-        "ingredient"
-      ).textContent =
-        ingredient;
-
-      document.getElementById(
-        "description"
-      ).textContent =
-        "Both of you cook. " +
-        "Anything goes — just make " +
-        ingredient.toLowerCase() +
-        " matter.";
-
-
-      const button =
-        document.getElementById(
-          "revealButton"
-        );
-
-      button.textContent =
-        "🔒 INGREDIENT LOCKED";
-
-      button.disabled =
-        true;
-
-      button.style.opacity =
-        "0.55";
-
-      document.getElementById(
-        "lockedMessage"
-      ).textContent =
-        "No rerolls. Both of you are cooking this.";
-
-    }
-
-  }
-
-
-  /*
-   * SHOW HISTORY
-   *
-   * Only completed/current weeks
-   * are shown.
-   *
-   * Future ingredients remain hidden.
-   */
-
-  function showHistory() {
-
-    const weekStart =
-      getWeekStart();
-
-    const currentWeek =
-      getWeekNumber(
-        weekStart
-      );
+  async function showHistory() {
 
     const history =
       document.getElementById(
         "historyList"
       );
 
-    history.innerHTML = "";
+    history.innerHTML =
+      "<div class='history-date'>Loading our potluck...</div>";
 
 
-    for (
-      let i = currentWeek;
-      i >= 0;
-      i--
-    ) {
-
-      const weekDate =
-        new Date(startDate);
-
-      weekDate.setDate(
-        startDate.getDate() +
-        (i * 7)
+    const response =
+      await supabaseRequest(
+        "potluck_weeks" +
+        "?select=*" +
+        "&order=week_number.desc"
       );
 
 
-      const reveals =
-        JSON.parse(
-          localStorage.getItem(
-            "potluckReveals"
-          ) || "{}"
-        );
+    if (!response.ok) {
+
+      history.innerHTML =
+        "<div class='history-date'>Could not load potluck history.</div>";
+
+      return;
+
+    }
 
 
-      const item =
-        document.createElement(
-          "div"
-        );
-
-      item.className =
-        "history-item";
+    const challenges =
+      await response.json();
 
 
-      if (reveals[i]) {
+    history.innerHTML = "";
+
+
+    if (!challenges.length) {
+
+      history.innerHTML =
+        "<div class='history-date'>No challenges yet. Someone needs to spin.</div>";
+
+      return;
+
+    }
+
+
+    challenges.forEach(
+      (challenge) => {
+
+        const item =
+          document.createElement(
+            "div"
+          );
+
+        item.className =
+          "history-item";
+
+
+        const date =
+          new Date(
+            challenge.start_date +
+            "T00:00:00"
+          );
+
 
         item.innerHTML = `
           <div>
             <div class="history-ingredient">
-              ${reveals[i]}
+              ${challenge.ingredient}
             </div>
 
             <div class="history-date">
-              Week of ${formatDate(weekDate)}
+              Week of ${formatDate(date)}
+              · Spun by ${challenge.spun_by}
             </div>
           </div>
 
           <div>🍴</div>
         `;
 
-      } else {
 
-        item.innerHTML = `
-          <div>
-            <div class="history-ingredient">
-              Week ${i + 1}
-            </div>
-
-            <div class="history-date">
-              Week of ${formatDate(weekDate)}
-            </div>
-          </div>
-
-          <div>🔒</div>
-        `;
+        history.appendChild(
+          item
+        );
 
       }
-
-
-      history.appendChild(
-        item
-      );
-
-    }
+    );
 
   }
 
 
   /*
-   * START THE PAGE
+   * INITIALISE THE PAGE
    */
 
-  showWeekDate();
+  async function initialise() {
 
-  showSpinner();
+    showWeekDate();
 
-  loadPreviousReveal();
+    showSpinner();
 
-  showHistory();
+    const challenge =
+      await getCurrentChallenge();
 
+
+    if (challenge) {
+
+      displayChallenge(
+        challenge
+      );
+
+    }
+
+
+    await showHistory();
+
+  }
+
+
+  initialise();
 
 </script>
 
