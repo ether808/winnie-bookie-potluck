@@ -4,6 +4,1666 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Winnie & Bookie | Kitchen Roulette</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700;800&display=swap');
+
+    :root {
+      --parchment: #f3ebdd;
+      --cream: #faf6ed;
+      --espresso: #2b211c;
+      --burgundy: #6e2633;
+      --orange: #c65a32;
+      --olive: #68704a;
+      --butter: #d9b96e;
+      --ink-soft: #665b52;
+      --line: #d8cdbd;
+      --white: #fffdf8;
+      --shadow: rgba(43, 33, 28, 0.13);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(
+          circle at 15% 10%,
+          rgba(198, 90, 50, .045) 0 1px,
+          transparent 1.5px
+        ),
+        radial-gradient(
+          circle at 80% 70%,
+          rgba(43, 33, 28, .035) 0 1px,
+          transparent 1.5px
+        ),
+        var(--parchment);
+      background-size: 19px 19px, 23px 23px, auto;
+      color: var(--espresso);
+      font-family: "DM Sans", sans-serif;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: min(92%, 760px);
+      margin: 0 auto;
+      padding: 28px 0 58px;
+    }
+
+    /* -------------------------
+       HEADER
+    ------------------------- */
+
+    header {
+      text-align: center;
+      padding: 12px 0 30px;
+      position: relative;
+    }
+
+    header::before,
+    header::after {
+      content: "✦";
+      position: absolute;
+      top: 46px;
+      color: var(--orange);
+      font-size: 13px;
+    }
+
+    header::before {
+      left: 9%;
+    }
+
+    header::after {
+      right: 9%;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--burgundy);
+      margin-bottom: 13px;
+    }
+
+    h1 {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(48px, 11vw, 78px);
+      line-height: .88;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: -2px;
+      text-transform: uppercase;
+    }
+
+    h1 span {
+      display: block;
+      color: var(--burgundy);
+      font-size: .82em;
+      letter-spacing: -1px;
+    }
+
+    .tagline {
+      margin: 19px auto 0;
+      max-width: 430px;
+      font-family: "Playfair Display", serif;
+      font-size: 16px;
+      font-style: italic;
+      color: var(--ink-soft);
+    }
+
+    .rule {
+      width: 76px;
+      height: 2px;
+      background: var(--orange);
+      margin: 22px auto 0;
+      position: relative;
+    }
+
+    .rule::after {
+      content: "◆";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--parchment);
+      color: var(--orange);
+      padding: 0 7px;
+      font-size: 7px;
+    }
+
+    /* -------------------------
+       MAIN ROULETTE CARD
+    ------------------------- */
+
+    .roulette-card {
+      background: var(--espresso);
+      color: var(--cream);
+      border-radius: 5px;
+      padding: 34px;
+      box-shadow: 0 18px 42px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .roulette-card::before {
+      content: "";
+      position: absolute;
+      inset: 9px;
+      border: 1px solid rgba(217, 185, 110, .24);
+      pointer-events: none;
+    }
+
+    .roulette-card::after {
+      content: "KITCHEN ROULETTE";
+      position: absolute;
+      right: -42px;
+      top: 43px;
+      transform: rotate(90deg);
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: rgba(250, 246, 237, .28);
+    }
+
+    .week-label {
+      text-align: center;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--butter);
+      margin-bottom: 9px;
+    }
+
+    .week-date {
+      text-align: center;
+      font-family: "Playfair Display", serif;
+      font-size: 20px;
+      margin-bottom: 25px;
+      color: var(--cream);
+    }
+
+    .spinner-turn {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .turn-label {
+      display: inline-block;
+      border: 1px solid rgba(217, 185, 110, .45);
+      padding: 7px 13px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.7px;
+      text-transform: uppercase;
+      color: var(--butter);
+    }
+
+    /* -------------------------
+       INGREDIENT
+    ------------------------- */
+
+    .ingredient-box {
+      border: 1px solid rgba(250, 246, 237, .18);
+      background: rgba(250, 246, 237, .055);
+      border-radius: 3px;
+      padding: 40px 20px 34px;
+      text-align: center;
+      transition: all .4s ease;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .ingredient-box::before,
+    .ingredient-box::after {
+      content: "✦";
+      position: absolute;
+      color: var(--orange);
+      font-size: 10px;
+      opacity: .9;
+    }
+
+    .ingredient-box::before {
+      top: 16px;
+      left: 18px;
+    }
+
+    .ingredient-box::after {
+      bottom: 16px;
+      right: 18px;
+    }
+
+    .ingredient-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      color: rgba(250, 246, 237, .62);
+      margin-bottom: 13px;
+    }
+
+    .ingredient {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(42px, 10vw, 66px);
+      line-height: 1;
+      font-weight: 600;
+      min-height: 67px;
+      color: var(--cream);
+    }
+
+    .description {
+      max-width: 480px;
+      margin: 17px auto 0;
+      color: rgba(250, 246, 237, .67);
+      line-height: 1.65;
+      font-size: 13px;
+    }
+
+    /* -------------------------
+       BUTTON
+    ------------------------- */
+
+    button {
+      display: block;
+      width: 100%;
+      border: 0;
+      border-radius: 2px;
+      padding: 17px 24px;
+      margin-top: 20px;
+      background: var(--orange);
+      color: var(--white);
+      font-family: "DM Sans", sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+
+    button:hover {
+      background: #d76b41;
+      transform: translateY(-2px);
+      box-shadow: 0 7px 18px rgba(0, 0, 0, .18);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .locked {
+      color: rgba(250, 246, 237, .48);
+      font-size: 11px;
+      margin-top: 14px;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* -------------------------
+       RULES
+    ------------------------- */
+
+    .rules {
+      margin-top: 30px;
+      background: var(--cream);
+      border: 1px solid var(--line);
+      padding: 28px 30px;
+      box-shadow: 0 10px 28px rgba(43, 33, 28, .055);
+      color: var(--espresso);
+    }
+
+    .section-kicker {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--burgundy);
+      margin-bottom: 7px;
+    }
+
+    .rules h2,
+    .history h2 {
+      font-family: "Playfair Display", serif;
+      font-size: 28px;
+      margin: 0 0 15px;
+      font-weight: 600;
+    }
+
+    .rules ol {
+      padding-left: 20px;
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.85;
+    }
+
+    .rules li::marker {
+      color: var(--orange);
+      font-weight: 700;
+    }
+
+    /* -------------------------
+       HISTORY
+    ------------------------- */
+
+    .history {
+      margin-top: 38px;
+    }
+
+    .history-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 15px;
+      border-bottom: 2px solid var(--espresso);
+      padding-bottom: 11px;
+      margin-bottom: 3px;
+    }
+
+    .history h2 {
+      margin: 0;
+    }
+
+    .history-note {
+      color: var(--ink-soft);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding: 17px 5px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+
+    .history-ingredient {
+      font-family: "Playfair Display", serif;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .history-date {
+      color: var(--ink-soft);
+      font-size: 10px;
+      margin-top: 3px;
+      letter-spacing: .3px;
+    }
+
+    .history-mark {
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      color: var(--burgundy);
+      font-size: 12px;
+      flex: 0 0 auto;
+    }
+
+    /* -------------------------
+       FOOTER
+    ------------------------- */
+
+    footer {
+      text-align: center;
+      margin-top: 43px;
+      color: var(--ink-soft);
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    footer strong {
+      color: var(--burgundy);
+      font-family: "Playfair Display", serif;
+      font-size: 15px;
+    }
+
+    /* -------------------------
+       REVEAL ANIMATION
+    ------------------------- */
+
+    .revealing {
+      animation: reveal .7s ease;
+    }
+
+    @keyframes reveal {
+      0% {
+        transform: scale(.96);
+        opacity: .2;
+      }
+
+      60% {
+        transform: scale(1.03);
+        opacity: .82;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* -------------------------
+       MOBILE
+    ------------------------- */
+
+    @media (max-width: 560px) {
+
+      .container {
+        width: min(92%, 760px);
+        padding-top: 18px;
+      }
+
+      header {
+        padding-bottom: 24px;
+      }
+
+      header::before {
+        left: 3%;
+      }
+
+      header::after {
+        right: 3%;
+      }
+
+      .roulette-card {
+        padding: 27px 20px;
+      }
+
+      .roulette-card::before {
+        inset: 7px;
+      }
+
+      .roulette-card::after {
+        display: none;
+      }
+
+      .rules {
+        padding: 24px 21px;
+      }
+
+      .history-header {
+        align-items: start;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .history h2 {
+        font-size: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <header>
+
+      <div class="eyebrow">
+        A private weekly supper club
+      </div>
+
+      <h1>
+        Winnie &amp; Bookie’s
+        <span>Kitchen Roulette</span>
+      </h1>
+
+      <div class="tagline">
+        Two kitchens. One ingredient. Zero excuses.
+      </div>
+
+      <div class="rule"></div>
+
+    </header>
+
+
+    <main>
+
+      <!-- =========================
+           WEEKLY ROULETTE
+      ========================== -->
+
+      <section class="roulette-card">
+
+        <div class="week-label">
+          Week in play
+        </div>
+
+        <div
+          class="week-date"
+          id="weekDate"
+        >
+          Loading...
+        </div>
+
+
+        <div class="spinner-turn">
+
+          <span
+            class="turn-label"
+            id="turnLabel"
+          >
+            Loading...
+          </span>
+
+        </div>
+
+
+        <div
+          class="ingredient-box"
+          id="ingredientBox"
+        >
+
+          <div class="ingredient-label">
+            The ingredient
+          </div>
+
+          <div
+            class="ingredient"
+            id="ingredient"
+          >
+            ???
+          </div>
+
+          <div
+            class="description"
+            id="description"
+          >
+            The pot is waiting.
+            One of you has to press the button.
+          </div>
+
+        </div>
+
+
+        <button
+          id="revealButton"
+          onclick="spinThePot()"
+        >
+          SPIN THE POT
+        </button>
+
+
+        <div
+          class="locked"
+          id="lockedMessage"
+        >
+          One spin. One ingredient. No take-backs.
+        </div>
+
+
+        <!-- =========================
+             RULES
+        ========================== -->
+
+        <div class="rules">
+
+          <div class="section-kicker">
+            The house rules
+          </div>
+
+          <h2>
+            How this works
+          </h2>
+
+          <ol>
+
+            <li>
+              The weekly ingredient must feature meaningfully in your dish.
+            </li>
+
+            <li>
+              Anything goes: sweet, savoury, drink, snack, main or dessert.
+            </li>
+
+            <li>
+              You each make your own dish.
+            </li>
+
+            <li>
+              No copying the other person's idea before the reveal.
+            </li>
+
+            <li>
+              You have one week.
+            </li>
+
+            <li>
+              Photographic evidence is strongly encouraged.
+            </li>
+
+            <li>
+              Complaining about the ingredient is permitted.
+              Changing it is not.
+            </li>
+
+          </ol>
+
+        </div>
+
+      </section>
+
+
+      <!-- =========================
+           HISTORY
+      ========================== -->
+
+      <section class="history">
+
+        <div class="history-header">
+
+          <h2>
+            Our potluck
+          </h2>
+
+          <div class="history-note">
+            The archive
+          </div>
+
+        </div>
+
+        <div id="historyList"></div>
+
+      </section>
+
+    </main>
+
+
+    <footer>
+
+      <strong>
+        Winnie &amp; Bookie
+      </strong>
+
+      <br>
+
+      May the better dish win.
+
+    </footer>
+
+  </div>
+
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
+
+  <script>
+
+    /*
+     * =====================================
+     * WINNIE & BOOKIE
+     * KITCHEN ROULETTE
+     *
+     * Supabase stores the official
+     * weekly challenge.
+     * =====================================
+     */
+
+
+    const SUPABASE_URL =
+      "https://mywlgfewdsitobzzbxbj.supabase.co";
+
+
+    const SUPABASE_KEY =
+      "sb_publishable_t0jIfQXkVWW5sQRWVmGUlQ_JeuYAExW";
+
+
+    /*
+     * =====================================
+     * INGREDIENT LIST
+     * =====================================
+     */
+
+    const ingredients = [
+
+      "Mango",
+      "Tamarind",
+      "Pineapple",
+      "Coconut",
+      "Plantain",
+      "Sweet Potato",
+      "Pumpkin",
+      "Passion Fruit",
+      "Peanut",
+      "Ginger",
+      "Cardamom",
+      "Cinnamon",
+      "Lemon",
+      "Lime",
+      "Orange",
+      "Apple",
+      "Pear",
+      "Banana",
+      "Papaya",
+      "Guava",
+      "Watermelon",
+      "Pomegranate",
+      "Avocado",
+      "Tomato",
+      "Carrot",
+      "Cauliflower",
+      "Broccoli",
+      "Eggplant",
+      "Cabbage",
+      "Spinach",
+      "Mushroom",
+      "Okra",
+      "Courgette",
+      "Bell Pepper",
+      "Green Beans",
+      "Corn",
+      "Potato",
+      "Cassava",
+      "Arrowroot",
+      "Chickpeas",
+      "Lentils",
+      "Rice",
+      "Oats",
+      "Quinoa",
+      "Millet",
+      "Sorghum",
+      "Coconut Milk",
+      "Yoghurt",
+      "Feta",
+      "Halloumi",
+      "Paneer",
+      "Tofu",
+      "Eggs",
+      "Chicken",
+      "Beef",
+      "Lamb",
+      "Prawns",
+      "Sardines",
+      "Tuna",
+      "Dark Chocolate",
+      "Honey",
+      "Dates",
+      "Figs",
+      "Almonds",
+      "Cashews",
+      "Walnuts",
+      "Pistachios",
+      "Sesame",
+      "Tahini",
+      "Peanut Butter",
+      "Soy Sauce",
+      "Miso",
+      "Mustard",
+      "Balsamic Vinegar",
+      "Apple Cider Vinegar",
+      "Turmeric",
+      "Chilli",
+      "Garlic",
+      "Onion",
+      "Basil",
+      "Mint",
+      "Coriander",
+      "Rosemary",
+      "Fennel",
+      "Celery",
+      "Leek",
+      "Asparagus",
+      "Beetroot",
+      "Kale",
+      "Brussels Sprouts",
+      "Jackfruit",
+      "Star Fruit",
+      "Kiwi",
+      "Lychee",
+      "Cherries",
+      "Apricot",
+      "Peach",
+      "Plum",
+      "Raspberry",
+      "Strawberry",
+      "Blueberry",
+      "Cocoa",
+      "Coffee",
+      "Vanilla",
+      "Molasses",
+      "Maple Syrup",
+      "Puff Pastry",
+      "Bread",
+      "Polenta"
+
+    ];
+
+
+    /*
+     * =====================================
+     * OFFICIAL START DATE
+     *
+     * Week 1 = 4 October 2026
+     * =====================================
+     */
+
+    const startDate =
+      new Date("2026-10-04T00:00:00");
+
+
+    /*
+     * =====================================
+     * SUPABASE REQUEST HELPER
+     * =====================================
+     */
+
+    async function supabaseRequest(
+      endpoint,
+      options = {}
+    ) {
+
+      const response =
+        await fetch(
+          SUPABASE_URL +
+          "/rest/v1/" +
+          endpoint,
+          {
+            ...options,
+
+            headers: {
+
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                "Bearer " + SUPABASE_KEY,
+
+              "Content-Type":
+                "application/json",
+
+              ...(options.headers || {})
+
+            }
+          }
+        );
+
+      return response;
+
+    }
+
+
+    /*
+     * =====================================
+     * CURRENT WEEK START
+     * =====================================
+     */
+
+    function getWeekStart() {
+
+      const today =
+        new Date();
+
+
+      if (today < startDate) {
+
+        return new Date(startDate);
+
+      }
+
+
+      const day =
+        today.getDay();
+
+
+      const sunday =
+        new Date(today);
+
+
+      sunday.setDate(
+        today.getDate() - day
+      );
+
+
+      sunday.setHours(
+        0,
+        0,
+        0,
+        0
+      );
+
+
+      return sunday;
+
+    }
+
+
+    /*
+     * =====================================
+     * WEEK NUMBER
+     * =====================================
+     */
+
+    function getWeekNumber(date) {
+
+      const difference =
+        date.getTime() -
+        startDate.getTime();
+
+
+      const days =
+        Math.floor(
+          difference /
+          (1000 * 60 * 60 * 24)
+        );
+
+
+      return Math.max(
+        0,
+        Math.floor(days / 7)
+      );
+
+    }
+
+
+    /*
+     * =====================================
+     * WHO GETS TO SPIN?
+     *
+     * Week 1 = Bookie
+     * Week 2 = Winnie
+     * Week 3 = Bookie
+     * etc.
+     * =====================================
+     */
+
+    function getSpinner(weekNumber) {
+
+      return weekNumber % 2 === 0
+        ? "Bookie"
+        : "Winnie";
+
+    }
+
+
+    /*
+     * =====================================
+     * DATE FORMATTING
+     * =====================================
+     */
+
+    function formatDate(date) {
+
+      return date.toLocaleDateString(
+        "en-GB",
+        {
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        }
+      );
+
+    }
+
+
+    /*
+     * =====================================
+     * SHOW CURRENT WEEK
+     * =====================================
+     */
+
+    function showWeekDate() {
+
+      const weekStart =
+        getWeekStart();
+
+
+      const weekEnd =
+        new Date(weekStart);
+
+
+      weekEnd.setDate(
+        weekStart.getDate() + 6
+      );
+
+
+      document.getElementById(
+        "weekDate"
+      ).textContent =
+        formatDate(weekStart) +
+        " – " +
+        formatDate(weekEnd);
+
+    }
+
+
+    /*
+     * =====================================
+     * RANDOM INGREDIENT
+     * =====================================
+     */
+
+    function chooseIngredient() {
+
+      const index =
+        Math.floor(
+          Math.random() *
+          ingredients.length
+        );
+
+
+      return ingredients[index];
+
+    }
+
+
+    /*
+     * =====================================
+     * GET CURRENT CHALLENGE
+     * =====================================
+     */
+
+    async function getCurrentChallenge() {
+
+      const weekNumber =
+        getWeekNumber(
+          getWeekStart()
+        );
+
+
+      const response =
+        await supabaseRequest(
+          "potluck_weeks" +
+          "?week_number=eq." +
+          weekNumber +
+          "&select=*"
+        );
+
+
+      if (!response.ok) {
+
+        console.error(
+          "Could not load challenge",
+          await response.text()
+        );
+
+        return null;
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      return data.length
+        ? data[0]
+        : null;
+
+    }
+
+
+    /*
+     * =====================================
+     * DISPLAY SAVED CHALLENGE
+     * =====================================
+     */
+
+    function displayChallenge(
+      challenge
+    ) {
+
+      const ingredientElement =
+        document.getElementById(
+          "ingredient"
+        );
+
+
+      const descriptionElement =
+        document.getElementById(
+          "description"
+        );
+
+
+      const button =
+        document.getElementById(
+          "revealButton"
+        );
+
+
+      const lockedMessage =
+        document.getElementById(
+          "lockedMessage"
+        );
+
+
+      const turnLabel =
+        document.getElementById(
+          "turnLabel"
+        );
+
+
+      ingredientElement.textContent =
+        challenge.ingredient;
+
+
+      descriptionElement.textContent =
+        "Both of you cook. " +
+        "Anything goes — just make " +
+        challenge.ingredient.toLowerCase() +
+        " matter.";
+
+
+      button.textContent =
+        "INGREDIENT LOCKED";
+
+
+      if (turnLabel) {
+
+        turnLabel.textContent =
+          "SPUN BY " +
+          challenge.spun_by.toUpperCase();
+
+      }
+
+
+      button.disabled =
+        true;
+
+
+      button.style.opacity =
+        "0.55";
+
+
+      button.style.cursor =
+        "default";
+
+
+      lockedMessage.textContent =
+        "Spun by " +
+        challenge.spun_by +
+        ". No rerolls. Both of you are cooking this.";
+
+    }
+
+
+    /*
+     * =====================================
+     * SHOW WHO SHOULD SPIN
+     * =====================================
+     */
+
+    function showSpinner() {
+
+      const weekNumber =
+        getWeekNumber(
+          getWeekStart()
+        );
+
+
+      const spinner =
+        getSpinner(weekNumber);
+
+
+      const button =
+        document.getElementById(
+          "revealButton"
+        );
+
+
+      const turnLabel =
+        document.getElementById(
+          "turnLabel"
+        );
+
+
+      turnLabel.textContent =
+        spinner.toUpperCase() +
+        "'S TURN TO SPIN";
+
+
+      button.textContent =
+        "SPIN THE POT";
+
+    }
+
+
+    /*
+     * =====================================
+     * SAVE CHALLENGE
+     * =====================================
+     */
+
+    async function saveChallenge(
+      weekNumber,
+      ingredient,
+      spinner
+    ) {
+
+      const response =
+        await supabaseRequest(
+          "potluck_weeks",
+          {
+
+            method: "POST",
+
+            headers: {
+
+              "Prefer":
+                "return=representation"
+
+            },
+
+            body:
+              JSON.stringify({
+
+                week_number:
+                  weekNumber,
+
+                start_date:
+                  getWeekStart()
+                    .toISOString()
+                    .split("T")[0],
+
+                ingredient:
+                  ingredient,
+
+                spun_by:
+                  spinner,
+
+                spun_at:
+                  new Date().toISOString()
+
+              })
+
+          }
+        );
+
+
+      /*
+       * If another device spun at
+       * almost exactly the same time,
+       * the unique constraint prevents
+       * a duplicate.
+       */
+
+      if (response.status === 409) {
+
+        return await getCurrentChallenge();
+
+      }
+
+
+      if (!response.ok) {
+
+        console.error(
+          "Could not save challenge",
+          await response.text()
+        );
+
+        return null;
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      return data[0];
+
+    }
+
+
+    /*
+     * =====================================
+     * SPIN THE POT
+     * =====================================
+     */
+
+    async function spinThePot() {
+
+      const button =
+        document.getElementById(
+          "revealButton"
+        );
+
+
+      const ingredientElement =
+        document.getElementById(
+          "ingredient"
+        );
+
+
+      const descriptionElement =
+        document.getElementById(
+          "description"
+        );
+
+
+      const box =
+        document.getElementById(
+          "ingredientBox"
+        );
+
+
+      /*
+       * First check whether somebody
+       * has already spun.
+       */
+
+      const existing =
+        await getCurrentChallenge();
+
+
+      if (existing) {
+
+        displayChallenge(
+          existing
+        );
+
+        return;
+
+      }
+
+
+      const weekNumber =
+        getWeekNumber(
+          getWeekStart()
+        );
+
+
+      const spinner =
+        getSpinner(weekNumber);
+
+
+      button.disabled =
+        true;
+
+
+      button.textContent =
+        "SPINNING...";
+
+
+      /*
+       * =====================================
+       * SPIN ANIMATION
+       * =====================================
+       */
+
+      const spinDuration =
+        1800;
+
+
+      const intervalTime =
+        90;
+
+
+      const spinInterval =
+        setInterval(
+          () => {
+
+            const randomIndex =
+              Math.floor(
+                Math.random() *
+                ingredients.length
+              );
+
+
+            ingredientElement.textContent =
+              ingredients[randomIndex];
+
+          },
+          intervalTime
+        );
+
+
+      /*
+       * =====================================
+       * STOP AND SAVE
+       * =====================================
+       */
+
+      setTimeout(
+        async () => {
+
+          clearInterval(
+            spinInterval
+          );
+
+
+          const selectedIngredient =
+            chooseIngredient();
+
+
+          ingredientElement.textContent =
+            selectedIngredient;
+
+
+          descriptionElement.textContent =
+            "Saving the official challenge...";
+
+
+          box.classList.remove(
+            "revealing"
+          );
+
+
+          void box.offsetWidth;
+
+
+          box.classList.add(
+            "revealing"
+          );
+
+
+          const challenge =
+            await saveChallenge(
+              weekNumber,
+              selectedIngredient,
+              spinner
+            );
+
+
+          if (!challenge) {
+
+            button.disabled =
+              false;
+
+
+            button.textContent =
+              "TRY AGAIN";
+
+
+            descriptionElement.textContent =
+              "Something went wrong. The pot refused to cooperate.";
+
+
+            return;
+
+          }
+
+
+          displayChallenge(
+            challenge
+          );
+
+
+          await showHistory();
+
+        },
+        spinDuration
+      );
+
+    }
+
+
+    /*
+     * =====================================
+     * LOAD HISTORY
+     * =====================================
+     */
+
+    async function showHistory() {
+
+      const history =
+        document.getElementById(
+          "historyList"
+        );
+
+
+      history.innerHTML =
+        "<div class='history-date'>" +
+        "Loading our potluck..." +
+        "</div>";
+
+
+      const response =
+        await supabaseRequest(
+          "potluck_weeks" +
+          "?select=*" +
+          "&order=week_number.desc"
+        );
+
+
+      if (!response.ok) {
+
+        history.innerHTML =
+          "<div class='history-date'>" +
+          "Could not load potluck history." +
+          "</div>";
+
+        return;
+
+      }
+
+
+      const challenges =
+        await response.json();
+
+
+      history.innerHTML = "";
+
+
+      if (!challenges.length) {
+
+        history.innerHTML =
+          "<div class='history-date'>" +
+          "No challenges yet. Someone needs to spin." +
+          "</div>";
+
+        return;
+
+      }
+
+
+      challenges.forEach(
+        (challenge) => {
+
+          const item =
+            document.createElement(
+              "div"
+            );
+
+
+          item.className =
+            "history-item";
+
+
+          const date =
+            new Date(
+              challenge.start_date +
+              "T00:00:00"
+            );
+
+
+          item.innerHTML = `
+
+            <div>
+
+              <div class="history-ingredient">
+                ${challenge.ingredient}
+              </div>
+
+              <div class="history-date">
+                Week of ${formatDate(date)}
+                · Spun by ${challenge.spun_by}
+              </div>
+
+            </div>
+
+            <div class="history-mark">
+              ✦
+            </div>
+
+          `;
+
+
+          history.appendChild(
+            item
+          );
+
+        }
+      );
+
+    }
+
+
+    /*
+     * =====================================
+     * INITIALISE
+     * =====================================
+     */
+
+    async function initialise() {
+
+      showWeekDate();
+
+
+      showSpinner();
+
+
+      const challenge =
+        await getCurrentChallenge();
+
+
+      if (challenge) {
+
+        displayChallenge(
+          challenge
+        );
+
+      }
+
+
+      await showHistory();
+
+    }
+
+
+    initialise();
+
+  </script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Winnie × Bookie | The Weekly Potluck</title>
 
   <style>
