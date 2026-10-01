@@ -268,10 +268,10 @@
         </div>
 
         <div class="ingredient-box" id="ingredientBox">
-
-          <div class="ingredient-label">
-            Your ingredient
-          </div>
+          
+        <div class="ingredient-label">
+          This week's challenge
+        </div>
 
           <div class="ingredient" id="ingredient">
             ???
@@ -284,12 +284,12 @@
 
         </div>
 
-        <button id="revealButton" onclick="revealIngredient()">
-          REVEAL THIS WEEK'S INGREDIENT
-        </button>
+      <button id="revealButton" onclick="spinThePot()">
+        🎲 SPIN THE POT
+      </button>
 
         <div class="locked" id="lockedMessage">
-          Once revealed, no rerolls. We have integrity here.
+          One spin. One ingredient. No take-backs.
         </div>
 
         <div class="rules">
@@ -328,422 +328,679 @@
   </div>
 
 
-  <script>
+<script>
 
-    /*
-      WINNIE × BOOKIE
-      THE WEEKLY POTLUCK
+  /*
+   * WINNIE × BOOKIE
+   * THE WEEKLY POTLUCK
+   *
+   * Game rules:
+   * - One ingredient per week
+   * - Both people cook
+   * - The spinner alternates between Winnie and Bookie
+   * - The ingredient is determined by the weekly seed
+   * - Once revealed, there are no rerolls
+   */
 
-      The ingredient is determined by the week.
-      This means both phones will get the SAME ingredient.
-    */
+  const ingredients = [
 
-    const ingredients = [
-
-      "Rhubarb",
-      "Cauliflower",
-      "Mango",
-      "Tamarind",
-      "Pear",
-      "Eggplant",
-      "Sweet Potato",
-      "Pineapple",
-      "Beetroot",
-      "Coconut",
-      "Pumpkin",
-      "Ginger",
-      "Cardamom",
-      "Passion Fruit",
-      "Plantain",
-      "Peanut",
-      "Sesame",
-      "Lemon",
-      "Lime",
-      "Apple",
-      "Banana",
-      "Avocado",
-      "Carrot",
-      "Corn",
-      "Spinach",
-      "Mushroom",
-      "Tomato",
-      "Cucumber",
-      "Green Beans",
-      "Chickpeas",
-      "Lentils",
-      "Black Beans",
-      "Yoghurt",
-      "Feta",
-      "Halloumi",
-      "Mozzarella",
-      "Honey",
-      "Dates",
-      "Fig",
-      "Orange",
-      "Grapefruit",
-      "Guava",
-      "Papaya",
-      "Watermelon",
-      "Strawberry",
-      "Blueberry",
-      "Peach",
-      "Plum",
-      "Pomegranate",
-      "Cocoa",
-      "Coffee",
-      "Cinnamon",
-      "Cloves",
-      "Turmeric",
-      "Rosemary",
-      "Basil",
-      "Mint",
-      "Coriander",
-      "Chilli",
-      "Garlic",
-      "Onion",
-      "Potato",
-      "Cassava",
-      "Arrowroot",
-      "Rice",
-      "Oats",
-      "Quinoa",
-      "Polenta",
-      "Bread",
-      "Puff Pastry",
-      "Walnuts",
-      "Almonds",
-      "Cashews",
-      "Pistachios",
-      "Tahini",
-      "Peanut Butter",
-      "Soy Sauce",
-      "Miso",
-      "Coconut Milk",
-      "Balsamic Vinegar",
-      "Apple Cider Vinegar",
-      "Mustard",
-      "Sardines",
-      "Tuna",
-      "Prawns",
-      "Salmon",
-      "Chicken",
-      "Beef",
-      "Lamb",
-      "Bacon",
-      "Eggs",
-      "Tofu",
-      "Paneer",
-      "Jackfruit",
-      "Okra",
-      "Broccoli",
-      "Brussels Sprouts",
-      "Cabbage",
-      "Kale",
-      "Fennel",
-      "Celery",
-      "Leek",
-      "Artichoke",
-      "Asparagus",
-      "Courgette",
-      "Bell Pepper",
-      "Cherries",
-      "Apricot",
-      "Blackberry",
-      "Raspberry",
-      "Kiwi",
-      "Lychee",
-      "Star Fruit",
-      "Tamarillo",
-      "Passion Fruit",
-      "Sorghum",
-      "Millet",
-      "Buckwheat",
-      "Polenta",
-      "Ricotta",
-      "Cream Cheese",
-      "Dark Chocolate",
-      "Vanilla",
-      "Maple Syrup",
-      "Molasses"
-    ];
+    "Mango",
+    "Tamarind",
+    "Pineapple",
+    "Coconut",
+    "Plantain",
+    "Sweet Potato",
+    "Pumpkin",
+    "Passion Fruit",
+    "Peanut",
+    "Ginger",
+    "Cardamom",
+    "Cinnamon",
+    "Lemon",
+    "Lime",
+    "Orange",
+    "Apple",
+    "Pear",
+    "Banana",
+    "Papaya",
+    "Guava",
+    "Watermelon",
+    "Pomegranate",
+    "Avocado",
+    "Tomato",
+    "Carrot",
+    "Cauliflower",
+    "Broccoli",
+    "Eggplant",
+    "Cabbage",
+    "Spinach",
+    "Mushroom",
+    "Okra",
+    "Courgette",
+    "Bell Pepper",
+    "Green Beans",
+    "Corn",
+    "Potato",
+    "Cassava",
+    "Arrowroot",
+    "Chickpeas",
+    "Lentils",
+    "Rice",
+    "Oats",
+    "Quinoa",
+    "Millet",
+    "Sorghum",
+    "Coconut Milk",
+    "Yoghurt",
+    "Feta",
+    "Halloumi",
+    "Paneer",
+    "Tofu",
+    "Eggs",
+    "Chicken",
+    "Beef",
+    "Lamb",
+    "Prawns",
+    "Sardines",
+    "Tuna",
+    "Dark Chocolate",
+    "Honey",
+    "Dates",
+    "Figs",
+    "Almonds",
+    "Cashews",
+    "Walnuts",
+    "Pistachios",
+    "Sesame",
+    "Tahini",
+    "Peanut Butter",
+    "Soy Sauce",
+    "Miso",
+    "Mustard",
+    "Balsamic Vinegar",
+    "Apple Cider Vinegar",
+    "Turmeric",
+    "Chilli",
+    "Garlic",
+    "Onion",
+    "Basil",
+    "Mint",
+    "Coriander",
+    "Rosemary",
+    "Fennel",
+    "Celery",
+    "Leek",
+    "Asparagus",
+    "Beetroot",
+    "Kale",
+    "Brussels Sprouts",
+    "Jackfruit",
+    "Star Fruit",
+    "Kiwi",
+    "Lychee",
+    "Cherries",
+    "Apricot",
+    "Peach",
+    "Plum",
+    "Raspberry",
+    "Strawberry",
+    "Blueberry",
+    "Cocoa",
+    "Coffee",
+    "Vanilla",
+    "Molasses",
+    "Maple Syrup",
+    "Puff Pastry",
+    "Bread",
+    "Polenta"
+  ];
 
 
-    /*
-      We start the potluck on Sunday 4 October 2026.
+  /*
+   * OFFICIAL START DATE
+   */
 
-      Every Sunday begins a new challenge.
-    */
-
-    const startDate = new Date("2026-10-04T00:00:00");
+  const startDate =
+    new Date("2026-10-04T00:00:00");
 
 
-    function getWeekNumber(date) {
+  /*
+   * GET THE CURRENT WEEK
+   */
 
-      const difference = date.getTime() - startDate.getTime();
+  function getWeekStart() {
 
-      const days = Math.floor(
-        difference / (1000 * 60 * 60 * 24)
+    const today = new Date();
+
+    if (today < startDate) {
+      return new Date(startDate);
+    }
+
+    const day = today.getDay();
+
+    const sunday = new Date(today);
+
+    sunday.setDate(
+      today.getDate() - day
+    );
+
+    sunday.setHours(0, 0, 0, 0);
+
+    return sunday;
+
+  }
+
+
+  /*
+   * WORK OUT WHICH POTLUCK WEEK WE ARE IN
+   */
+
+  function getWeekNumber(date) {
+
+    const difference =
+      date.getTime() -
+      startDate.getTime();
+
+    const days =
+      Math.floor(
+        difference /
+        (1000 * 60 * 60 * 24)
       );
 
-      return Math.max(0, Math.floor(days / 7));
+    return Math.max(
+      0,
+      Math.floor(days / 7)
+    );
 
-    }
-
-
-    /*
-      This creates a repeatable number from the week.
-      The important bit:
-
-      Week 0 always produces the same ingredient.
-      Week 1 always produces the same ingredient.
-      etc.
-
-      Therefore Winnie and Bookie get the same challenge.
-    */
-
-    function seededRandom(seed) {
-
-      let x = Math.sin(seed) * 10000;
-
-      return x - Math.floor(x);
-
-    }
+  }
 
 
-    function getIngredient(weekNumber) {
+  /*
+   * DETERMINISTIC RANDOM NUMBER
+   *
+   * This means the same week always
+   * produces the same ingredient.
+   *
+   * This is our temporary system while
+   * we build the shared database.
+   */
 
-      const randomNumber = seededRandom(
+  function seededRandom(seed) {
+
+    let x =
+      Math.sin(seed) * 10000;
+
+    return x - Math.floor(x);
+
+  }
+
+
+  /*
+   * GET THIS WEEK'S INGREDIENT
+   */
+
+  function getIngredient(weekNumber) {
+
+    const randomNumber =
+      seededRandom(
         weekNumber * 9301 + 49297
       );
 
-      const index = Math.floor(
-        randomNumber * ingredients.length
+    const index =
+      Math.floor(
+        randomNumber *
+        ingredients.length
       );
 
-      return ingredients[index];
+    return ingredients[index];
 
-    }
-
-
-function getWeekStart() {
-
-  const today = new Date();
-
-  // The potluck officially starts on 4 October 2026.
-  // Before then, show the launch week rather than a September week.
-
-  if (today < startDate) {
-    return new Date(startDate);
   }
 
-  const day = today.getDay();
 
-  const sunday = new Date(today);
+  /*
+   * WORK OUT WHO GETS TO SPIN
+   *
+   * Week 0 = Bookie
+   * Week 1 = Winnie
+   * Week 2 = Bookie
+   * Week 3 = Winnie
+   */
 
-  sunday.setDate(
-    today.getDate() - day
-  );
+  function getSpinner(weekNumber) {
 
-  sunday.setHours(0, 0, 0, 0);
+    if (weekNumber % 2 === 0) {
 
-  return sunday;
+      return "Bookie";
 
-}
+    } else {
 
-
-    function formatDate(date) {
-
-      return date.toLocaleDateString(
-        "en-GB",
-        {
-          day: "numeric",
-          month: "long",
-          year: "numeric"
-        }
-      );
+      return "Winnie";
 
     }
 
+  }
 
-    function revealIngredient() {
 
-      const weekStart = getWeekStart();
+  /*
+   * FORMAT DATES
+   */
 
-      const weekNumber = getWeekNumber(weekStart);
+  function formatDate(date) {
 
-      const ingredient = getIngredient(weekNumber);
+    return date.toLocaleDateString(
+      "en-GB",
+      {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      }
+    );
 
-      const ingredientElement =
-        document.getElementById("ingredient");
+  }
 
-      const descriptionElement =
-        document.getElementById("description");
 
-      const button =
-        document.getElementById("revealButton");
+  /*
+   * SHOW THE WEEK
+   */
 
-      const box =
-        document.getElementById("ingredientBox");
+  function showWeekDate() {
 
-      ingredientElement.textContent = ingredient;
+    const weekStart =
+      getWeekStart();
+
+    const weekEnd =
+      new Date(weekStart);
+
+    weekEnd.setDate(
+      weekStart.getDate() + 6
+    );
+
+    document.getElementById(
+      "weekDate"
+    ).textContent =
+      formatDate(weekStart) +
+      " – " +
+      formatDate(weekEnd);
+
+  }
+
+
+  /*
+   * SHOW WHO SPINS
+   */
+
+  function showSpinner() {
+
+    const weekStart =
+      getWeekStart();
+
+    const weekNumber =
+      getWeekNumber(weekStart);
+
+    const spinner =
+      getSpinner(weekNumber);
+
+    const button =
+      document.getElementById(
+        "revealButton"
+      );
+
+    button.textContent =
+      "🎲 " +
+      spinner.toUpperCase() +
+      "'S TURN — SPIN THE POT";
+
+  }
+
+
+  /*
+   * THE SPIN
+   */
+
+  function spinThePot() {
+
+    const weekStart =
+      getWeekStart();
+
+    const weekNumber =
+      getWeekNumber(weekStart);
+
+    const ingredient =
+      getIngredient(weekNumber);
+
+    const ingredientElement =
+      document.getElementById(
+        "ingredient"
+      );
+
+    const descriptionElement =
+      document.getElementById(
+        "description"
+      );
+
+    const button =
+      document.getElementById(
+        "revealButton"
+      );
+
+    const box =
+      document.getElementById(
+        "ingredientBox"
+      );
+
+
+    /*
+     * Disable the button while spinning.
+     */
+
+    button.disabled = true;
+
+    button.textContent =
+      "🎲 SPINNING...";
+
+
+    /*
+     * Ingredients shown during
+     * the animation.
+     */
+
+    let count = 0;
+
+    const spinDuration = 1600;
+
+    const intervalTime = 90;
+
+
+    const spinInterval =
+      setInterval(() => {
+
+        const randomIndex =
+          Math.floor(
+            Math.random() *
+            ingredients.length
+          );
+
+        ingredientElement.textContent =
+          ingredients[randomIndex];
+
+        count++;
+
+      }, intervalTime);
+
+
+    /*
+     * Stop the animation and reveal
+     * the official ingredient.
+     */
+
+    setTimeout(() => {
+
+      clearInterval(
+        spinInterval
+      );
+
+      ingredientElement.textContent =
+        ingredient;
 
       descriptionElement.textContent =
-        "Create anything you want. Just make " +
+        "Both of you cook. " +
+        "Anything goes — just make " +
         ingredient.toLowerCase() +
         " matter.";
 
-      box.classList.add("revealing");
+      box.classList.remove(
+        "revealing"
+      );
 
-      button.textContent = "INGREDIENT REVEALED";
+      void box.offsetWidth;
 
-      button.disabled = true;
+      box.classList.add(
+        "revealing"
+      );
 
-      button.style.opacity = "0.55";
 
-      button.style.cursor = "default";
+      button.textContent =
+        "🔒 INGREDIENT LOCKED";
 
-      saveReveal(weekNumber, ingredient);
+      button.style.opacity =
+        "0.55";
+
+      button.style.cursor =
+        "default";
+
+
+      document.getElementById(
+        "lockedMessage"
+      ).textContent =
+        "No rerolls. Both of you are cooking this.";
+
+
+      saveReveal(
+        weekNumber,
+        ingredient
+      );
+
+    }, spinDuration);
+
+  }
+
+
+  /*
+   * SAVE THE REVEAL
+   *
+   * This is local for now.
+   * We'll replace this with a shared
+   * database in the next stage.
+   */
+
+  function saveReveal(
+    weekNumber,
+    ingredient
+  ) {
+
+    const reveals =
+      JSON.parse(
+        localStorage.getItem(
+          "potluckReveals"
+        ) || "{}"
+      );
+
+    reveals[weekNumber] =
+      ingredient;
+
+    localStorage.setItem(
+      "potluckReveals",
+      JSON.stringify(
+        reveals
+      )
+    );
+
+  }
+
+
+  /*
+   * LOAD A PREVIOUSLY REVEALED
+   * INGREDIENT
+   */
+
+  function loadPreviousReveal() {
+
+    const weekStart =
+      getWeekStart();
+
+    const weekNumber =
+      getWeekNumber(
+        weekStart
+      );
+
+    const reveals =
+      JSON.parse(
+        localStorage.getItem(
+          "potluckReveals"
+        ) || "{}"
+      );
+
+
+    if (reveals[weekNumber]) {
+
+      const ingredient =
+        reveals[weekNumber];
+
+      document.getElementById(
+        "ingredient"
+      ).textContent =
+        ingredient;
+
+      document.getElementById(
+        "description"
+      ).textContent =
+        "Both of you cook. " +
+        "Anything goes — just make " +
+        ingredient.toLowerCase() +
+        " matter.";
+
+
+      const button =
+        document.getElementById(
+          "revealButton"
+        );
+
+      button.textContent =
+        "🔒 INGREDIENT LOCKED";
+
+      button.disabled =
+        true;
+
+      button.style.opacity =
+        "0.55";
+
+      document.getElementById(
+        "lockedMessage"
+      ).textContent =
+        "No rerolls. Both of you are cooking this.";
 
     }
 
+  }
 
-    function saveReveal(weekNumber, ingredient) {
+
+  /*
+   * SHOW HISTORY
+   *
+   * Only completed/current weeks
+   * are shown.
+   *
+   * Future ingredients remain hidden.
+   */
+
+  function showHistory() {
+
+    const weekStart =
+      getWeekStart();
+
+    const currentWeek =
+      getWeekNumber(
+        weekStart
+      );
+
+    const history =
+      document.getElementById(
+        "historyList"
+      );
+
+    history.innerHTML = "";
+
+
+    for (
+      let i = currentWeek;
+      i >= 0;
+      i--
+    ) {
+
+      const weekDate =
+        new Date(startDate);
+
+      weekDate.setDate(
+        startDate.getDate() +
+        (i * 7)
+      );
+
 
       const reveals =
         JSON.parse(
-          localStorage.getItem("potluckReveals") || "{}"
+          localStorage.getItem(
+            "potluckReveals"
+          ) || "{}"
         );
 
-      reveals[weekNumber] = ingredient;
 
-      localStorage.setItem(
-        "potluckReveals",
-        JSON.stringify(reveals)
-      );
-
-    }
-
-
-    function loadPreviousReveal() {
-
-      const weekStart = getWeekStart();
-
-      const weekNumber = getWeekNumber(weekStart);
-
-      const reveals =
-        JSON.parse(
-          localStorage.getItem("potluckReveals") || "{}"
+      const item =
+        document.createElement(
+          "div"
         );
 
-      if (reveals[weekNumber]) {
-
-        document.getElementById("ingredient")
-          .textContent = reveals[weekNumber];
-
-        document.getElementById("description")
-          .textContent =
-          "Create anything you want. Just make " +
-          reveals[weekNumber].toLowerCase() +
-          " matter.";
-
-        const button =
-          document.getElementById("revealButton");
-
-        button.textContent =
-          "INGREDIENT ALREADY REVEALED";
-
-        button.disabled = true;
-
-        button.style.opacity = "0.55";
-
-      }
-
-    }
+      item.className =
+        "history-item";
 
 
-    function showWeekDate() {
-
-      const weekStart = getWeekStart();
-
-      const weekEnd = new Date(weekStart);
-
-      weekEnd.setDate(
-        weekStart.getDate() + 6
-      );
-
-      document.getElementById("weekDate")
-        .textContent =
-        formatDate(weekStart) +
-        " – " +
-        formatDate(weekEnd);
-
-    }
-
-
-    function showHistory() {
-
-      const today = new Date();
-
-      const currentWeek =
-        getWeekNumber(getWeekStart());
-
-      const history =
-        document.getElementById("historyList");
-
-      history.innerHTML = "";
-
-      /*
-        Only show weeks from the official start date
-        up to the current week.
-      */
-
-      for (
-        let i = currentWeek;
-        i >= 0;
-        i--
-      ) {
-
-        const weekDate = new Date(startDate);
-
-        weekDate.setDate(
-          startDate.getDate() + (i * 7)
-        );
-
-        const ingredient =
-          getIngredient(i);
-
-        const item =
-          document.createElement("div");
-
-        item.className = "history-item";
+      if (reveals[i]) {
 
         item.innerHTML = `
           <div>
             <div class="history-ingredient">
-              ${ingredient}
+              ${reveals[i]}
             </div>
+
             <div class="history-date">
               Week of ${formatDate(weekDate)}
             </div>
           </div>
+
           <div>🍴</div>
         `;
 
-        history.appendChild(item);
+      } else {
+
+        item.innerHTML = `
+          <div>
+            <div class="history-ingredient">
+              Week ${i + 1}
+            </div>
+
+            <div class="history-date">
+              Week of ${formatDate(weekDate)}
+            </div>
+          </div>
+
+          <div>🔒</div>
+        `;
 
       }
 
+
+      history.appendChild(
+        item
+      );
+
     }
 
-
-    showWeekDate();
-
-    loadPreviousReveal();
-
-    showHistory();
+  }
 
 
-  </script>
+  /*
+   * START THE PAGE
+   */
+
+  showWeekDate();
+
+  showSpinner();
+
+  loadPreviousReveal();
+
+  showHistory();
+
+
+</script>
 
 </body>
 </html>
