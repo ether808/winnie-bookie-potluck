@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Winnie × Bookie | The Weekly Potluck</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap');
+
+    :root {
+      --cream: #f7f3ec;
+      --paper: #fffdf8;
+      --ink: #292620;
+      --muted: #756f66;
+      --accent: #a84f3d;
+      --accent-dark: #813a2d;
+      --line: #ded7cc;
+      --soft: #eee7dc;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: "DM Sans", sans-serif;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: min(92%, 720px);
+      margin: 0 auto;
+      padding: 30px 0 60px;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px 0 35px;
+    }
+
+    .names {
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(42px, 10vw, 72px);
+      line-height: 0.95;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      margin-top: 18px;
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 12px 35px rgba(50, 40, 30, 0.06);
+    }
+
+    .week-label {
+      text-align: center;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .week-date {
+      text-align: center;
+      font-family: "Playfair Display", serif;
+      font-size: 22px;
+      margin-bottom: 28px;
+    }
+
+    .ingredient-box {
+      border: 1px dashed var(--line);
+      border-radius: 18px;
+      padding: 38px 20px;
+      text-align: center;
+      background: #fbf8f2;
+      transition: all 0.4s ease;
+    }
+
+    .ingredient-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .ingredient {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(38px, 9vw, 58px);
+      font-weight: 600;
+      min-height: 65px;
+    }
+
+    .description {
+      max-width: 500px;
+      margin: 20px auto 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      border: none;
+      border-radius: 100px;
+      padding: 16px 24px;
+      margin-top: 24px;
+      background: var(--accent);
+      color: white;
+      font-family: "DM Sans", sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .rules {
+      margin-top: 28px;
+      padding-top: 25px;
+      border-top: 1px solid var(--line);
+    }
+
+    .rules h2 {
+      font-family: "Playfair Display", serif;
+      font-size: 22px;
+      margin: 0 0 15px;
+    }
+
+    .rules ol {
+      padding-left: 20px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    .history {
+      margin-top: 30px;
+    }
+
+    .history h2 {
+      font-family: "Playfair Display", serif;
+      font-size: 27px;
+      margin-bottom: 15px;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 4px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+
+    .history-date {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .history-ingredient {
+      font-weight: 600;
+    }
+
+    .locked {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 14px;
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .revealing {
+      animation: reveal 0.7s ease;
+    }
+
+    @keyframes reveal {
+      0% {
+        transform: scale(0.96);
+        opacity: 0.2;
+      }
+      60% {
+        transform: scale(1.03);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding-top: 15px;
+      }
+
+      .card {
+        padding: 22px 18px;
+      }
+
+      header {
+        padding-bottom: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <header>
+      <div class="names">Winnie × Bookie</div>
+      <h1>The Weekly<br>Potluck</h1>
+      <div class="subtitle">
+        One ingredient. Two kitchens. No excuses.
+      </div>
+    </header>
+
+    <main>
+
+      <section class="card">
+
+        <div class="week-label">This week's challenge</div>
+
+        <div class="week-date" id="weekDate">
+          Loading...
+        </div>
+
+        <div class="ingredient-box" id="ingredientBox">
+
+          <div class="ingredient-label">
+            Your ingredient
+          </div>
+
+          <div class="ingredient" id="ingredient">
+            ???
+          </div>
+
+          <div class="description" id="description">
+            The ingredient is waiting.
+            One of you has to press the button.
+          </div>
+
+        </div>
+
+        <button id="revealButton" onclick="revealIngredient()">
+          REVEAL THIS WEEK'S INGREDIENT
+        </button>
+
+        <div class="locked" id="lockedMessage">
+          Once revealed, no rerolls. We have integrity here.
+        </div>
+
+        <div class="rules">
+
+          <h2>The rules</h2>
+
+          <ol>
+            <li>The weekly ingredient must feature meaningfully in your dish.</li>
+            <li>Anything goes: sweet, savoury, drink, snack, main or dessert.</li>
+            <li>You each make your own dish.</li>
+            <li>No copying the other person's idea before the reveal.</li>
+            <li>You have one week.</li>
+            <li>Photographic evidence is strongly encouraged.</li>
+            <li>Complaining about the ingredient is permitted. Changing it is not.</li>
+          </ol>
+
+        </div>
+
+      </section>
+
+      <section class="history">
+
+        <h2>Our potluck</h2>
+
+        <div id="historyList"></div>
+
+      </section>
+
+    </main>
+
+    <footer>
+      Made for Winnie & Bookie.<br>
+      May the better dish win.
+    </footer>
+
+  </div>
+
+
+  <script>
+
+    /*
+      WINNIE × BOOKIE
+      THE WEEKLY POTLUCK
+
+      The ingredient is determined by the week.
+      This means both phones will get the SAME ingredient.
+    */
+
+    const ingredients = [
+
+      "Rhubarb",
+      "Cauliflower",
+      "Mango",
+      "Tamarind",
+      "Pear",
+      "Eggplant",
+      "Sweet Potato",
+      "Pineapple",
+      "Beetroot",
+      "Coconut",
+      "Pumpkin",
+      "Ginger",
+      "Cardamom",
+      "Passion Fruit",
+      "Plantain",
+      "Peanut",
+      "Sesame",
+      "Lemon",
+      "Lime",
+      "Apple",
+      "Banana",
+      "Avocado",
+      "Carrot",
+      "Corn",
+      "Spinach",
+      "Mushroom",
+      "Tomato",
+      "Cucumber",
+      "Green Beans",
+      "Chickpeas",
+      "Lentils",
+      "Black Beans",
+      "Yoghurt",
+      "Feta",
+      "Halloumi",
+      "Mozzarella",
+      "Honey",
+      "Dates",
+      "Fig",
+      "Orange",
+      "Grapefruit",
+      "Guava",
+      "Papaya",
+      "Watermelon",
+      "Strawberry",
+      "Blueberry",
+      "Peach",
+      "Plum",
+      "Pomegranate",
+      "Cocoa",
+      "Coffee",
+      "Cinnamon",
+      "Cloves",
+      "Turmeric",
+      "Rosemary",
+      "Basil",
+      "Mint",
+      "Coriander",
+      "Chilli",
+      "Garlic",
+      "Onion",
+      "Potato",
+      "Cassava",
+      "Arrowroot",
+      "Rice",
+      "Oats",
+      "Quinoa",
+      "Polenta",
+      "Bread",
+      "Puff Pastry",
+      "Walnuts",
+      "Almonds",
+      "Cashews",
+      "Pistachios",
+      "Tahini",
+      "Peanut Butter",
+      "Soy Sauce",
+      "Miso",
+      "Coconut Milk",
+      "Balsamic Vinegar",
+      "Apple Cider Vinegar",
+      "Mustard",
+      "Sardines",
+      "Tuna",
+      "Prawns",
+      "Salmon",
+      "Chicken",
+      "Beef",
+      "Lamb",
+      "Bacon",
+      "Eggs",
+      "Tofu",
+      "Paneer",
+      "Jackfruit",
+      "Okra",
+      "Broccoli",
+      "Brussels Sprouts",
+      "Cabbage",
+      "Kale",
+      "Fennel",
+      "Celery",
+      "Leek",
+      "Artichoke",
+      "Asparagus",
+      "Courgette",
+      "Bell Pepper",
+      "Cherries",
+      "Apricot",
+      "Blackberry",
+      "Raspberry",
+      "Kiwi",
+      "Lychee",
+      "Star Fruit",
+      "Tamarillo",
+      "Passion Fruit",
+      "Sorghum",
+      "Millet",
+      "Buckwheat",
+      "Polenta",
+      "Ricotta",
+      "Cream Cheese",
+      "Dark Chocolate",
+      "Vanilla",
+      "Maple Syrup",
+      "Molasses"
+    ];
+
+
+    /*
+      We start the potluck on Sunday 4 October 2026.
+
+      Every Sunday begins a new challenge.
+    */
+
+    const startDate = new Date("2026-10-04T00:00:00");
+
+
+    function getWeekNumber(date) {
+
+      const difference = date.getTime() - startDate.getTime();
+
+      const days = Math.floor(
+        difference / (1000 * 60 * 60 * 24)
+      );
+
+      return Math.max(0, Math.floor(days / 7));
+
+    }
+
+
+    /*
+      This creates a repeatable number from the week.
+      The important bit:
+
+      Week 0 always produces the same ingredient.
+      Week 1 always produces the same ingredient.
+      etc.
+
+      Therefore Winnie and Bookie get the same challenge.
+    */
+
+    function seededRandom(seed) {
+
+      let x = Math.sin(seed) * 10000;
+
+      return x - Math.floor(x);
+
+    }
+
+
+    function getIngredient(weekNumber) {
+
+      const randomNumber = seededRandom(
+        weekNumber * 9301 + 49297
+      );
+
+      const index = Math.floor(
+        randomNumber * ingredients.length
+      );
+
+      return ingredients[index];
+
+    }
+
+
+    function getWeekStart() {
+
+      const today = new Date();
+
+      const day = today.getDay();
+
+      const daysSinceSunday = day;
+
+      const sunday = new Date(today);
+
+      sunday.setDate(
+        today.getDate() - daysSinceSunday
+      );
+
+      sunday.setHours(0, 0, 0, 0);
+
+      return sunday;
+
+    }
+
+
+    function formatDate(date) {
+
+      return date.toLocaleDateString(
+        "en-GB",
+        {
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        }
+      );
+
+    }
+
+
+    function revealIngredient() {
+
+      const weekStart = getWeekStart();
+
+      const weekNumber = getWeekNumber(weekStart);
+
+      const ingredient = getIngredient(weekNumber);
+
+      const ingredientElement =
+        document.getElementById("ingredient");
+
+      const descriptionElement =
+        document.getElementById("description");
+
+      const button =
+        document.getElementById("revealButton");
+
+      const box =
+        document.getElementById("ingredientBox");
+
+      ingredientElement.textContent = ingredient;
+
+      descriptionElement.textContent =
+        "Create anything you want. Just make " +
+        ingredient.toLowerCase() +
+        " matter.";
+
+      box.classList.add("revealing");
+
+      button.textContent = "INGREDIENT REVEALED";
+
+      button.disabled = true;
+
+      button.style.opacity = "0.55";
+
+      button.style.cursor = "default";
+
+      saveReveal(weekNumber, ingredient);
+
+    }
+
+
+    function saveReveal(weekNumber, ingredient) {
+
+      const reveals =
+        JSON.parse(
+          localStorage.getItem("potluckReveals") || "{}"
+        );
+
+      reveals[weekNumber] = ingredient;
+
+      localStorage.setItem(
+        "potluckReveals",
+        JSON.stringify(reveals)
+      );
+
+    }
+
+
+    function loadPreviousReveal() {
+
+      const weekStart = getWeekStart();
+
+      const weekNumber = getWeekNumber(weekStart);
+
+      const reveals =
+        JSON.parse(
+          localStorage.getItem("potluckReveals") || "{}"
+        );
+
+      if (reveals[weekNumber]) {
+
+        document.getElementById("ingredient")
+          .textContent = reveals[weekNumber];
+
+        document.getElementById("description")
+          .textContent =
+          "Create anything you want. Just make " +
+          reveals[weekNumber].toLowerCase() +
+          " matter.";
+
+        const button =
+          document.getElementById("revealButton");
+
+        button.textContent =
+          "INGREDIENT ALREADY REVEALED";
+
+        button.disabled = true;
+
+        button.style.opacity = "0.55";
+
+      }
+
+    }
+
+
+    function showWeekDate() {
+
+      const weekStart = getWeekStart();
+
+      const weekEnd = new Date(weekStart);
+
+      weekEnd.setDate(
+        weekStart.getDate() + 6
+      );
+
+      document.getElementById("weekDate")
+        .textContent =
+        formatDate(weekStart) +
+        " – " +
+        formatDate(weekEnd);
+
+    }
+
+
+    function showHistory() {
+
+      const today = new Date();
+
+      const currentWeek =
+        getWeekNumber(getWeekStart());
+
+      const history =
+        document.getElementById("historyList");
+
+      history.innerHTML = "";
+
+      /*
+        Only show weeks from the official start date
+        up to the current week.
+      */
+
+      for (
+        let i = currentWeek;
+        i >= 0;
+        i--
+      ) {
+
+        const weekDate = new Date(startDate);
+
+        weekDate.setDate(
+          startDate.getDate() + (i * 7)
+        );
+
+        const ingredient =
+          getIngredient(i);
+
+        const item =
+          document.createElement("div");
+
+        item.className = "history-item";
+
+        item.innerHTML = `
+          <div>
+            <div class="history-ingredient">
+              ${ingredient}
+            </div>
+            <div class="history-date">
+              Week of ${formatDate(weekDate)}
+            </div>
+          </div>
+          <div>🍴</div>
+        `;
+
+        history.appendChild(item);
+
+      }
+
+    }
+
+
+    showWeekDate();
+
+    loadPreviousReveal();
+
+    showHistory();
+
+
+  </script>
+
+</body>
+</html>
