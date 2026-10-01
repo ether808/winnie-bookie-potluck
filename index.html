@@ -525,25 +525,30 @@
     }
 
 
-    function getWeekStart() {
+function getWeekStart() {
 
-      const today = new Date();
+  const today = new Date();
 
-      const day = today.getDay();
+  // The potluck officially starts on 4 October 2026.
+  // Before then, show the launch week rather than a September week.
 
-      const daysSinceSunday = day;
+  if (today < startDate) {
+    return new Date(startDate);
+  }
 
-      const sunday = new Date(today);
+  const day = today.getDay();
 
-      sunday.setDate(
-        today.getDate() - daysSinceSunday
-      );
+  const sunday = new Date(today);
 
-      sunday.setHours(0, 0, 0, 0);
+  sunday.setDate(
+    today.getDate() - day
+  );
 
-      return sunday;
+  sunday.setHours(0, 0, 0, 0);
 
-    }
+  return sunday;
+
+}
 
 
     function formatDate(date) {
