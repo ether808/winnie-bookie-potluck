@@ -38,7 +38,8 @@
 
     button,
     input,
-    textarea {
+    textarea,
+    select {
       font: inherit;
     }
 
@@ -122,7 +123,8 @@
     }
 
     .field input,
-    .field textarea {
+    .field textarea,
+    .field select {
       width: 100%;
       border: 1px solid var(--line);
       background: var(--white);
@@ -137,7 +139,8 @@
     }
 
     .field input:focus,
-    .field textarea:focus {
+    .field textarea:focus,
+    .field select:focus {
       border-color: var(--burgundy);
     }
 
@@ -159,11 +162,25 @@
       background: #d76b41;
     }
 
+    .primary-button:disabled {
+      opacity: .55;
+      cursor: default;
+    }
+
     .error {
       margin-top: 14px;
       padding: 11px 13px;
       background: #f5ded7;
       color: #7b2e20;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .success {
+      margin-top: 13px;
+      padding: 11px 13px;
+      background: #e4e8d8;
+      color: #4e5835;
       font-size: 12px;
       line-height: 1.5;
     }
@@ -438,34 +455,12 @@
       border: 1px solid var(--line);
     }
 
-    .section-card.dark {
-      background: var(--espresso);
-      color: var(--cream);
-      border-color: var(--espresso);
-    }
-
-    .section-card.dark .section-kicker {
-      color: var(--butter);
-    }
-
-    .section-card.dark .section-title {
-      color: var(--cream);
-    }
-
     .section-intro {
       margin: 0 0 22px;
       color: var(--muted);
       font-size: 13px;
       line-height: 1.7;
     }
-
-    .dark .section-intro {
-      color: rgba(250,246,237,.68);
-    }
-
-    /* =================================
-       SUBMISSIONS
-    ================================= */
 
     .challenge-summary {
       padding: 15px;
@@ -479,6 +474,10 @@
       font-family: "Playfair Display", serif;
       font-size: 20px;
     }
+
+    /* =================================
+       SUBMISSIONS
+    ================================= */
 
     .submission-grid {
       display: grid;
@@ -578,13 +577,6 @@
       font-size: 12px;
     }
 
-    .rating-row select {
-      width: 100%;
-      padding: 9px;
-      border: 1px solid var(--line);
-      background: var(--white);
-    }
-
     .rating-total {
       margin-top: 18px;
       padding: 13px;
@@ -679,14 +671,6 @@
       padding: 18px 0;
     }
 
-    .success {
-      margin-top: 13px;
-      padding: 11px 13px;
-      background: #e4e8d8;
-      color: #4e5835;
-      font-size: 12px;
-    }
-
     .revealing {
       animation: reveal .7s ease;
     }
@@ -709,6 +693,7 @@
     }
 
     @media (max-width: 650px) {
+
       .container {
         padding-top: 14px;
       }
@@ -770,6 +755,7 @@
 
         <div class="field">
           <label for="email">Email</label>
+
           <input
             id="email"
             type="email"
@@ -780,6 +766,7 @@
 
         <div class="field">
           <label for="password">Password</label>
+
           <input
             id="password"
             type="password"
@@ -823,6 +810,7 @@
 
         <div>
           Playing as:
+
           <span
             id="accountName"
             class="account-name"
@@ -899,7 +887,6 @@
 
           </div>
 
-
           <div
             class="ingredient-box"
             id="ingredientBox"
@@ -925,7 +912,6 @@
 
           </div>
 
-
           <button
             id="spinButton"
             class="spin-button"
@@ -933,7 +919,6 @@
           >
             SPIN THE POT
           </button>
-
 
           <div
             class="locked"
@@ -996,7 +981,7 @@
 
 
         <!-- =================================
-             COOKING / SUBMISSIONS
+             SUBMISSIONS
         ================================= -->
 
         <section class="section">
@@ -1051,7 +1036,6 @@
 
               </div>
 
-
               <div class="field">
 
                 <label for="dishDescription">
@@ -1065,7 +1049,6 @@
                 ></textarea>
 
               </div>
-
 
               <div class="field">
 
@@ -1084,7 +1067,6 @@
                 </div>
 
               </div>
-
 
               <button
                 id="submitDishButton"
@@ -1160,7 +1142,11 @@
             </p>
 
             <div class="rating-row">
-              <label for="taste">Taste</label>
+
+              <label for="taste">
+                Taste
+              </label>
+
               <select id="taste">
                 <option value="">—</option>
                 <option value="1">1</option>
@@ -1169,10 +1155,15 @@
                 <option value="4">4</option>
                 <option value="5">5</option>
               </select>
+
             </div>
 
             <div class="rating-row">
-              <label for="creativity">Creativity</label>
+
+              <label for="creativity">
+                Creativity
+              </label>
+
               <select id="creativity">
                 <option value="">—</option>
                 <option value="1">1</option>
@@ -1181,10 +1172,15 @@
                 <option value="4">4</option>
                 <option value="5">5</option>
               </select>
+
             </div>
 
             <div class="rating-row">
-              <label for="ingredientUse">Ingredient use</label>
+
+              <label for="ingredientUse">
+                Ingredient use
+              </label>
+
               <select id="ingredientUse">
                 <option value="">—</option>
                 <option value="1">1</option>
@@ -1193,10 +1189,15 @@
                 <option value="4">4</option>
                 <option value="5">5</option>
               </select>
+
             </div>
 
             <div class="rating-row">
-              <label for="presentation">Presentation</label>
+
+              <label for="presentation">
+                Presentation
+              </label>
+
               <select id="presentation">
                 <option value="">—</option>
                 <option value="1">1</option>
@@ -1205,6 +1206,7 @@
                 <option value="4">4</option>
                 <option value="5">5</option>
               </select>
+
             </div>
 
             <div
@@ -1294,12 +1296,17 @@
     const PHOTO_BUCKET =
       "potluck-photos";
 
-    const {
-      createClient
-    } = window.supabase;
 
-    const supabase =
-      createClient(
+    /*
+      IMPORTANT:
+      The CDN exposes the global `window.supabase`.
+
+      We deliberately call our client `supabaseClient`
+      so Firefox does not encounter a global-name collision.
+    */
+
+    const supabaseClient =
+      window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY
       );
@@ -1311,6 +1318,7 @@
 
     const START_DATE =
       new Date("2026-10-04T00:00:00");
+
 
     const ingredients = [
 
@@ -1438,7 +1446,7 @@
 
 
     /* =========================================================
-       DOM HELPERS
+       DOM HELPER
     ========================================================= */
 
     function $(id) {
@@ -1462,7 +1470,8 @@
       type = "success"
     ) {
 
-      element.textContent = message;
+      element.textContent =
+        message;
 
       element.className =
         type === "error"
@@ -1484,7 +1493,11 @@
         new Date();
 
       if (today < START_DATE) {
-        return new Date(START_DATE);
+
+        return new Date(
+          START_DATE
+        );
+
       }
 
       const day =
@@ -1528,14 +1541,16 @@
     }
 
 
-    function getSpinner(weekNumber) {
+    /*
+      Week 1 = Bookie
+      Week 2 = Winnie
+      Week 3 = Bookie
+      etc.
+    */
 
-      /*
-        Week 1 = Bookie
-        Week 2 = Winnie
-        Week 3 = Bookie
-        etc.
-      */
+    function getSpinner(
+      weekNumber
+    ) {
 
       return weekNumber % 2 === 1
         ? "Bookie"
@@ -1544,7 +1559,9 @@
     }
 
 
-    function isRevealed(weekStart) {
+    function isRevealed(
+      weekStart
+    ) {
 
       const revealDate =
         new Date(weekStart);
@@ -1558,7 +1575,9 @@
     }
 
 
-    function formatDate(date) {
+    function formatDate(
+      date
+    ) {
 
       return date.toLocaleDateString(
         "en-GB",
@@ -1578,16 +1597,22 @@
         getWeekStart();
 
       const weekEnd =
-        new Date(weekStart);
+        new Date(
+          weekStart
+        );
 
       weekEnd.setDate(
         weekStart.getDate() + 6
       );
 
       $("weekDate").textContent =
-        formatDate(weekStart) +
+        formatDate(
+          weekStart
+        ) +
         " – " +
-        formatDate(weekEnd);
+        formatDate(
+          weekEnd
+        );
 
     }
 
@@ -1605,7 +1630,7 @@
         data,
         error
       } =
-        await supabase.auth.signInWithPassword({
+        await supabaseClient.auth.signInWithPassword({
           email,
           password
         });
@@ -1625,25 +1650,32 @@
     async function loadPlayerIdentity() {
 
       if (!currentUser) {
+
         throw new Error(
           "No authenticated user."
         );
+
       }
 
       const {
         data,
         error
       } =
-        await supabase
+        await supabaseClient
           .from("potluck_players")
           .select("player")
-          .eq("id", currentUser.id)
+          .eq(
+            "id",
+            currentUser.id
+          )
           .single();
 
       if (error) {
+
         throw new Error(
           "This Supabase account is not linked to a Kitchen Roulette player."
         );
+
       }
 
       currentPlayer =
@@ -1657,13 +1689,18 @@
 
     async function logout() {
 
-      await supabase.auth.signOut();
+      await supabaseClient.auth.signOut();
 
       currentUser = null;
       currentPlayer = null;
 
-      hide($("app"));
-      show($("loginScreen"));
+      hide(
+        $("app")
+      );
+
+      show(
+        $("loginScreen")
+      );
 
     }
 
@@ -1683,7 +1720,7 @@
         data,
         error
       } =
-        await supabase
+        await supabaseClient
           .from("potluck_weeks")
           .select("*")
           .eq(
@@ -1693,8 +1730,14 @@
           .limit(1);
 
       if (error) {
-        console.error(error);
+
+        console.error(
+          "Could not load challenge:",
+          error
+        );
+
         return null;
+
       }
 
       return data.length
@@ -1713,10 +1756,12 @@
           currentWeekNumber
         );
 
+
       $("turnLabel").textContent =
         spinner === currentPlayer
           ? `Your turn — ${spinner}`
           : `${spinner}'s turn`;
+
 
       if (!challenge) {
 
@@ -1745,17 +1790,22 @@
 
       }
 
+
       $("ingredient").textContent =
         challenge.ingredient;
+
 
       $("description").textContent =
         `Both of you cook. Anything goes — just make ${challenge.ingredient.toLowerCase()} matter.`;
 
+
       $("spinButton").disabled =
         true;
 
+
       $("spinButton").textContent =
         "INGREDIENT LOCKED";
+
 
       $("lockedMessage").textContent =
         `Spun by ${challenge.spun_by}.`;
@@ -1769,12 +1819,16 @@
         return;
       }
 
+
       const spinner =
         getSpinner(
           currentWeekNumber
         );
 
-      if (currentPlayer !== spinner) {
+
+      if (
+        currentPlayer !== spinner
+      ) {
 
         alert(
           `It's ${spinner}'s turn to spin.`
@@ -1784,11 +1838,13 @@
 
       }
 
+
       $("spinButton").disabled =
         true;
 
       $("spinButton").textContent =
         "SPINNING...";
+
 
       const ingredient =
         ingredients[
@@ -1798,17 +1854,12 @@
           )
         ];
 
-      /*
-        The database has a UNIQUE constraint
-        on week_number, so only one challenge
-        can exist for the week.
-      */
 
       const {
         data,
         error
       } =
-        await supabase
+        await supabaseClient
           .from("potluck_weeks")
           .insert({
             week_number:
@@ -1827,16 +1878,23 @@
 
             spun_at:
               new Date().toISOString()
+
           })
           .select()
           .single();
 
+
       if (error) {
 
-        console.error(error);
+        console.error(
+          "Spin error:",
+          error
+        );
+
 
         const existing =
           await getCurrentChallenge();
+
 
         if (existing) {
 
@@ -1851,11 +1909,13 @@
 
         }
 
+
         $("spinButton").disabled =
           false;
 
         $("spinButton").textContent =
           "SPIN THE POT";
+
 
         alert(
           "The spin could not be saved. Please try again."
@@ -1865,28 +1925,45 @@
 
       }
 
+
       currentChallenge =
         data;
 
+
       $("ingredientBox")
-        .classList.add("revealing");
+        .classList.add(
+          "revealing"
+        );
+
 
       $("ingredient").textContent =
         ingredient;
 
+
       $("description").textContent =
         `Both of you cook. Anything goes — just make ${ingredient.toLowerCase()} matter.`;
+
 
       $("spinButton").textContent =
         "INGREDIENT LOCKED";
 
+
       $("lockedMessage").textContent =
         `Spun by ${currentPlayer}.`;
 
-      setTimeout(() => {
-        $("ingredientBox")
-          .classList.remove("revealing");
-      }, 800);
+
+      setTimeout(
+        () => {
+
+          $("ingredientBox")
+            .classList.remove(
+              "revealing"
+            );
+
+        },
+        800
+      );
+
 
       await loadSubmissions();
 
@@ -1903,11 +1980,12 @@
         return [];
       }
 
+
       const {
         data,
         error
       } =
-        await supabase
+        await supabaseClient
           .from("potluck_submissions")
           .select("*")
           .eq(
@@ -1916,16 +1994,23 @@
           )
           .order(
             "submitted_at",
-            { ascending: true }
+            {
+              ascending: true
+            }
           );
+
 
       if (error) {
 
-        console.error(error);
+        console.error(
+          "Could not load submissions:",
+          error
+        );
 
         return [];
 
       }
+
 
       return data || [];
 
@@ -1953,17 +2038,19 @@
         return null;
       }
 
+
       const {
         data,
         error
       } =
-        await supabase
+        await supabaseClient
           .storage
           .from(PHOTO_BUCKET)
           .createSignedUrl(
             path,
             3600
           );
+
 
       if (error) {
 
@@ -1975,6 +2062,7 @@
         return null;
 
       }
+
 
       return data.signedUrl;
 
@@ -1988,13 +2076,18 @@
     ) {
 
       const card =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       card.className =
         "player-submission";
 
+
       const heading =
-        document.createElement("h3");
+        document.createElement(
+          "h3"
+        );
 
       heading.textContent =
         player;
@@ -2007,7 +2100,9 @@
       if (!submission) {
 
         const status =
-          document.createElement("div");
+          document.createElement(
+            "div"
+          );
 
         status.className =
           "submission-status";
@@ -2027,7 +2122,9 @@
 
 
       const dishName =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       dishName.className =
         "dish-name";
@@ -2045,7 +2142,9 @@
       ) {
 
         const description =
-          document.createElement("div");
+          document.createElement(
+            "div"
+          );
 
         description.className =
           "dish-description";
@@ -2070,10 +2169,13 @@
             submission.photo_url
           );
 
+
         if (url) {
 
           const image =
-            document.createElement("img");
+            document.createElement(
+              "img"
+            );
 
           image.className =
             "dish-photo";
@@ -2097,7 +2199,9 @@
       ) {
 
         const note =
-          document.createElement("div");
+          document.createElement(
+            "div"
+          );
 
         note.className =
           "submission-status";
@@ -2114,6 +2218,7 @@
 
       }
 
+
       return card;
 
     }
@@ -2125,17 +2230,23 @@
         currentChallenge ||
         await getCurrentChallenge();
 
+
       if (!challenge) {
 
-        $("submissionChallenge").textContent =
+        $("submissionChallenge")
+          .textContent =
           "The ingredient has not been spun yet.";
 
-        $("submissionArea").innerHTML =
+
+        $("submissionArea")
+          .innerHTML =
           "<div class='loading'>Waiting for the pot to be spun.</div>";
+
 
         hide(
           $("submissionFormContainer")
         );
+
 
         return;
 
@@ -2146,12 +2257,14 @@
         challenge;
 
 
-      $("submissionChallenge").innerHTML =
+      $("submissionChallenge")
+        .innerHTML =
         `This week's ingredient: <strong>${escapeHtml(challenge.ingredient)}</strong>`;
 
 
       const submissions =
         await getSubmissions();
+
 
       const revealed =
         isRevealed(
@@ -2159,7 +2272,8 @@
         );
 
 
-      $("submissionArea").innerHTML =
+      $("submissionArea")
+        .innerHTML =
         "";
 
 
@@ -2174,6 +2288,7 @@
             player
           );
 
+
         const card =
           await renderSubmissionCard(
             player,
@@ -2181,8 +2296,11 @@
             revealed
           );
 
+
         $("submissionArea")
-          .appendChild(card);
+          .appendChild(
+            card
+          );
 
       }
 
@@ -2250,15 +2368,18 @@
 
       }
 
+
       const dishName =
         $("dishName")
           .value
           .trim();
 
+
       const description =
         $("dishDescription")
           .value
           .trim();
+
 
       const file =
         $("dishPhoto")
@@ -2280,7 +2401,7 @@
         data: existing,
         error: existingError
       } =
-        await supabase
+        await supabaseClient
           .from("potluck_submissions")
           .select("id")
           .eq(
@@ -2296,7 +2417,9 @@
 
       if (existingError) {
 
-        console.error(existingError);
+        console.error(
+          existingError
+        );
 
         alert(
           "Could not check your existing submission."
@@ -2324,7 +2447,9 @@
 
 
       $("submitDishButton")
-        .disabled = true;
+        .disabled =
+        true;
+
 
       $("submitDishButton")
         .textContent =
@@ -2338,9 +2463,7 @@
       try {
 
         /*
-          Upload the photo first.
-
-          Path:
+          Photo path:
 
           week/<weekNumber>/<player>/<random-file>
         */
@@ -2352,6 +2475,7 @@
             "image/png",
             "image/webp"
           ];
+
 
           if (
             !allowedTypes.includes(
@@ -2398,7 +2522,7 @@
           const {
             error: uploadError
           } =
-            await supabase
+            await supabaseClient
               .storage
               .from(PHOTO_BUCKET)
               .upload(
@@ -2425,15 +2549,17 @@
 
 
         /*
-          Store the PRIVATE STORAGE PATH,
-          not a public URL.
+          Store the private storage path,
+          NOT a public URL.
         */
 
         const {
           error: insertError
         } =
-          await supabase
-            .from("potluck_submissions")
+          await supabaseClient
+            .from(
+              "potluck_submissions"
+            )
             .insert({
               week_number:
                 currentWeekNumber,
@@ -2445,13 +2571,15 @@
                 dishName,
 
               description:
-                description || null,
+                description ||
+                null,
 
               photo_url:
                 photoPath,
 
               submitted_at:
                 new Date().toISOString()
+
             });
 
 
@@ -2485,6 +2613,7 @@
           error
         );
 
+
         setMessage(
           $("submissionMessage"),
           error.message ||
@@ -2495,7 +2624,9 @@
       } finally {
 
         $("submitDishButton")
-          .disabled = false;
+          .disabled =
+          false;
+
 
         $("submitDishButton")
           .textContent =
@@ -2517,11 +2648,15 @@
       const container =
         $("revealedSubmissions");
 
+
       container.innerHTML =
         "";
 
+
       const heading =
-        document.createElement("h2");
+        document.createElement(
+          "h2"
+        );
 
       heading.className =
         "section-title";
@@ -2529,13 +2664,16 @@
       heading.textContent =
         "The dishes";
 
+
       container.appendChild(
         heading
       );
 
 
       const grid =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
       grid.className =
         "submission-grid";
@@ -2552,12 +2690,14 @@
             player
           );
 
+
         const card =
           await renderSubmissionCard(
             player,
             submission,
             true
           );
+
 
         grid.appendChild(
           card
@@ -2580,11 +2720,17 @@
     function updateRatingTotal() {
 
       const values = [
+
         $("taste").value,
+
         $("creativity").value,
+
         $("ingredientUse").value,
+
         $("presentation").value
+
       ];
+
 
       if (
         values.some(
@@ -2600,12 +2746,18 @@
 
       }
 
+
       const total =
         values.reduce(
-          (sum, value) =>
-            sum + Number(value),
+          (
+            sum,
+            value
+          ) =>
+            sum +
+            Number(value),
           0
         );
+
 
       $("ratingTotal")
         .textContent =
@@ -2620,20 +2772,24 @@
         return;
       }
 
+
       const taste =
         Number(
           $("taste").value
         );
+
 
       const creativity =
         Number(
           $("creativity").value
         );
 
+
       const ingredientUse =
         Number(
           $("ingredientUse").value
         );
+
 
       const presentation =
         Number(
@@ -2671,14 +2827,17 @@
 
 
       $("submitRatingButton")
-        .disabled = true;
+        .disabled =
+        true;
 
 
       const {
         error
       } =
-        await supabase
-          .from("potluck_ratings")
+        await supabaseClient
+          .from(
+            "potluck_ratings"
+          )
           .insert({
             week_number:
               currentWeekNumber,
@@ -2689,22 +2848,34 @@
             rated_player:
               ratedPlayer,
 
-            taste,
-            creativity,
+            taste:
+              taste,
+
+            creativity:
+              creativity,
+
             ingredient_use:
               ingredientUse,
 
-            presentation,
-            total,
+            presentation:
+              presentation,
+
+            total:
+              total,
 
             submitted_at:
               new Date().toISOString()
+
           });
 
 
       if (error) {
 
-        console.error(error);
+        console.error(
+          "Rating error:",
+          error
+        );
+
 
         setMessage(
           $("ratingMessage"),
@@ -2713,8 +2884,11 @@
           "error"
         );
 
+
         $("submitRatingButton")
-          .disabled = false;
+          .disabled =
+          false;
+
 
         return;
 
@@ -2726,8 +2900,10 @@
         "Rating submitted."
       );
 
+
       $("submitRatingButton")
-        .disabled = true;
+        .disabled =
+        true;
 
     }
 
@@ -2742,7 +2918,7 @@
         data,
         error
       } =
-        await supabase
+        await supabaseClient
           .from("potluck_weeks")
           .select(
             "week_number,start_date,ingredient,spun_by"
@@ -2755,13 +2931,19 @@
           )
           .limit(20);
 
+
       if (error) {
 
-        console.error(error);
+        console.error(
+          "History error:",
+          error
+        );
+
 
         $("historyList")
           .textContent =
           "Could not load the archive.";
+
 
         return;
 
@@ -2773,6 +2955,7 @@
         $("historyList")
           .textContent =
           "No spins yet.";
+
 
         return;
 
@@ -2788,18 +2971,24 @@
         week => {
 
           const item =
-            document.createElement("div");
+            document.createElement(
+              "div"
+            );
 
           item.className =
             "history-item";
 
 
           const left =
-            document.createElement("div");
+            document.createElement(
+              "div"
+            );
 
 
           const ingredient =
-            document.createElement("div");
+            document.createElement(
+              "div"
+            );
 
           ingredient.className =
             "history-ingredient";
@@ -2809,10 +2998,13 @@
 
 
           const date =
-            document.createElement("div");
+            document.createElement(
+              "div"
+            );
 
           date.className =
             "history-date";
+
 
           date.textContent =
             `Week ${week.week_number} · ${formatDate(
@@ -2827,13 +3019,16 @@
             ingredient
           );
 
+
           left.appendChild(
             date
           );
 
 
           const mark =
-            document.createElement("div");
+            document.createElement(
+              "div"
+            );
 
           mark.className =
             "history-mark";
@@ -2846,13 +3041,16 @@
             left
           );
 
+
           item.appendChild(
             mark
           );
 
 
           $("historyList")
-            .appendChild(item);
+            .appendChild(
+              item
+            );
 
         }
       );
@@ -2864,25 +3062,32 @@
        ESCAPE HTML
     ========================================================= */
 
-    function escapeHtml(value) {
+    function escapeHtml(
+      value
+    ) {
 
       return String(value)
+
         .replace(
           /&/g,
           "&amp;"
         )
+
         .replace(
           /</g,
           "&lt;"
         )
+
         .replace(
           />/g,
           "&gt;"
         )
+
         .replace(
           /"/g,
           "&quot;"
         )
+
         .replace(
           /'/g,
           "&#039;"
@@ -2904,13 +3109,20 @@
             user
           }
         } =
-          await supabase.auth.getUser();
+          await supabaseClient
+            .auth
+            .getUser();
 
 
         if (!user) {
 
-          hide($("app"));
-          show($("loginScreen"));
+          hide(
+            $("app")
+          );
+
+          show(
+            $("loginScreen")
+          );
 
           return;
 
@@ -2927,6 +3139,7 @@
         hide(
           $("loginScreen")
         );
+
 
         show(
           $("app")
@@ -2953,6 +3166,7 @@
 
         await loadSubmissions();
 
+
         await loadHistory();
 
 
@@ -2963,15 +3177,27 @@
           error
         );
 
-        await supabase.auth.signOut();
 
-        hide($("app"));
-        show($("loginScreen"));
+        await supabaseClient
+          .auth
+          .signOut();
+
+
+        hide(
+          $("app")
+        );
+
+
+        show(
+          $("loginScreen")
+        );
+
 
         $("loginError")
           .textContent =
           error.message ||
           "Could not initialise the app.";
+
 
         show(
           $("loginError")
@@ -2993,10 +3219,12 @@
 
           event.preventDefault();
 
+
           const email =
             $("email")
               .value
               .trim();
+
 
           const password =
             $("password")
@@ -3004,11 +3232,14 @@
 
 
           $("loginButton")
-            .disabled = true;
+            .disabled =
+            true;
+
 
           $("loginButton")
             .textContent =
             "ENTERING...";
+
 
           hide(
             $("loginError")
@@ -3022,16 +3253,23 @@
               password
             );
 
+
             await initialiseApp();
+
 
           } catch (error) {
 
-            console.error(error);
+            console.error(
+              "Login error:",
+              error
+            );
+
 
             $("loginError")
               .textContent =
               error.message ||
               "Login failed.";
+
 
             show(
               $("loginError")
@@ -3040,7 +3278,9 @@
           } finally {
 
             $("loginButton")
-              .disabled = false;
+              .disabled =
+              false;
+
 
             $("loginButton")
               .textContent =
@@ -3089,6 +3329,7 @@
       "creativity",
       "ingredientUse",
       "presentation"
+
     ].forEach(
       id => {
 
@@ -3106,27 +3347,37 @@
        AUTH STATE
     ========================================================= */
 
-    supabase.auth.onAuthStateChange(
-      async (
-        event,
-        session
-      ) => {
+    supabaseClient
+      .auth
+      .onAuthStateChange(
+        async (
+          event,
+          session
+        ) => {
 
-        if (
-          event === "SIGNED_OUT" ||
-          !session
-        ) {
+          if (
+            event === "SIGNED_OUT" ||
+            !session
+          ) {
 
-          currentUser = null;
-          currentPlayer = null;
+            currentUser =
+              null;
 
-          hide($("app"));
-          show($("loginScreen"));
+            currentPlayer =
+              null;
+
+            hide(
+              $("app")
+            );
+
+            show(
+              $("loginScreen")
+            );
+
+          }
 
         }
-
-      }
-    );
+      );
 
 
     /* =========================================================
