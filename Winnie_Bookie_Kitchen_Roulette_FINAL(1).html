@@ -1,0 +1,2697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Winnie & Bookie | Kitchen Roulette</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+
+    :root {
+      --parchment: #f3ebdd;
+      --cream: #faf6ed;
+      --espresso: #2b211c;
+      --burgundy: #6e2633;
+      --orange: #c65a32;
+      --butter: #d9b96e;
+      --muted: #75685e;
+      --line: #d8cdbd;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--parchment);
+      color: var(--espresso);
+      font-family: "DM Sans", sans-serif;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: min(92%, 760px);
+      margin: auto;
+      padding: 30px 0 60px;
+    }
+
+    header {
+      text-align: center;
+      padding: 15px 0 30px;
+    }
+
+    .eyebrow {
+      color: var(--burgundy);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(45px, 11vw, 76px);
+      line-height: .88;
+      letter-spacing: -2px;
+      text-transform: uppercase;
+    }
+
+    h1 span {
+      display: block;
+      color: var(--burgundy);
+      font-size: .82em;
+    }
+
+    .tagline {
+      margin: 18px auto 0;
+      color: var(--muted);
+      font-family: "Playfair Display", serif;
+      font-size: 16px;
+      font-style: italic;
+    }
+
+    .divider {
+      width: 70px;
+      height: 2px;
+      background: var(--orange);
+      margin: 22px auto 0;
+    }
+
+    .roulette-card {
+      position: relative;
+      overflow: hidden;
+      padding: 34px;
+      background: var(--espresso);
+      color: var(--cream);
+      box-shadow: 0 18px 42px rgba(43,33,28,.14);
+    }
+
+    .roulette-card::before {
+      content: "";
+      position: absolute;
+      inset: 9px;
+      border: 1px solid rgba(217,185,110,.28);
+      pointer-events: none;
+    }
+
+    .week-label {
+      color: var(--butter);
+      text-align: center;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .week-date {
+      margin: 9px 0 24px;
+      color: var(--cream);
+      text-align: center;
+      font-family: "Playfair Display", serif;
+      font-size: 21px;
+    }
+
+    .turn {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .turn-label {
+      display: inline-block;
+      padding: 7px 14px;
+      border: 1px solid rgba(217,185,110,.5);
+      border-radius: 50px;
+      color: var(--butter);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .ingredient-box {
+      min-height: 220px;
+      padding: 40px 20px 30px;
+      border: 1px solid rgba(250,246,237,.2);
+      background: rgba(250,246,237,.06);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .ingredient-label {
+      margin-bottom: 14px;
+      color: rgba(250,246,237,.65);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+
+    /* THE INGREDIENT IS EXPLICITLY CREAM */
+    .ingredient {
+      color: #faf6ed !important;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(42px, 10vw, 66px);
+      font-weight: 700;
+      line-height: 1;
+      text-align: center;
+      min-height: 67px;
+    }
+
+    .description {
+      max-width: 480px;
+      margin: 18px auto 0;
+      color: rgba(250,246,237,.7);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 17px 24px;
+      border: 0;
+      border-radius: 2px;
+      background: var(--orange);
+      color: #fff;
+      cursor: pointer;
+      font-family: "DM Sans", sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+    }
+
+    button:hover {
+      background: #d76b41;
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      cursor: default;
+    }
+
+    .locked {
+      margin-top: 14px;
+      color: rgba(250,246,237,.5);
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .rules {
+      margin-top: 30px;
+      padding: 27px 30px;
+      background: var(--cream);
+      color: var(--espresso);
+      border: 1px solid var(--line);
+    }
+
+    .section-kicker {
+      margin-bottom: 7px;
+      color: var(--burgundy);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+
+    .rules h2,
+
+    .rules ol {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.85;
+    }
+
+    .rules li::marker {
+      color: var(--orange);
+      font-weight: 700;
+    }
+
+    .history h2 {
+      margin: 0;
+    }
+
+    footer {
+      margin-top: 42px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    footer strong {
+      color: var(--burgundy);
+      font-family: "Playfair Display", serif;
+      font-size: 15px;
+    }
+
+    .revealing {
+      animation: reveal .7s ease;
+    }
+
+    .login-card {
+      margin-top: 30px;
+      padding: 30px;
+      background: var(--cream);
+      border: 1px solid var(--line);
+    }
+
+    .login-card.hidden { display: none; }
+
+    .login-form {
+      max-width: 520px;
+      margin: 20px auto 0;
+    }
+
+    .login-form label {
+      display: block;
+      margin: 15px 0 7px;
+      color: var(--espresso);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .login-form input {
+      width: 100%;
+      border: 1px solid var(--line);
+      padding: 13px 14px;
+      background: #fffdf8;
+      color: var(--espresso);
+      font: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .login-form input:focus { border-color: var(--burgundy); }
+
+    .test-banner {
+      display: none;
+      margin: 0 auto 20px;
+      padding: 10px 14px;
+      background: var(--butter);
+      color: var(--espresso);
+      text-align: center;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+    }
+
+    .test-banner.visible {
+      display: block;
+    }
+
+    .test-banner span {
+      font-weight: 500;
+      letter-spacing: .4px;
+      text-transform: none;
+    }
+
+    .test-reset {
+      width: auto;
+      margin: 0 0 0 8px;
+      padding: 6px 10px;
+      background: transparent;
+      color: var(--espresso);
+      border: 1px solid rgba(43,33,28,.35);
+      font-size: 9px;
+    }
+
+    .test-reset:hover {
+      background: var(--cream);
+      transform: none;
+    }
+
+    .account-bar {
+      margin-top: 30px;
+      padding: 16px 18px;
+      background: var(--espresso);
+      color: var(--cream);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .account-bar.hidden { display: none; }
+
+    .account-bar strong {
+      font-family: "Playfair Display", serif;
+      font-size: 20px;
+    }
+
+    .logout-button {
+      width: auto;
+      margin: 0;
+      padding: 10px 15px;
+      background: transparent;
+      border: 1px solid rgba(250,246,237,.35);
+      color: var(--cream);
+    }
+
+    .logout-button:hover { background: var(--burgundy); }
+
+    .cooking-section {
+      margin-top: 30px;
+      background: var(--cream);
+      color: var(--espresso);
+      border: 1px solid var(--line);
+      padding: 30px;
+    }
+
+    .cooking-section.hidden { display: none; }
+
+    .identity-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .identity-button {
+      margin-top: 0;
+      background: var(--espresso);
+      color: var(--cream);
+      border: 1px solid var(--espresso);
+    }
+
+    .identity-button:hover { background: var(--burgundy); }
+    .identity-button.selected { background: var(--burgundy); }
+
+    .submission-form { margin-top: 22px; }
+
+    .submission-form label {
+      display: block;
+      margin: 17px 0 7px;
+      color: var(--espresso);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .submission-form input[type="text"],
+    .submission-form textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      padding: 13px 14px;
+      background: #fffdf8;
+      color: var(--espresso);
+      font: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .submission-form textarea {
+      min-height: 110px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .submission-form input:focus,
+    .submission-form textarea:focus {
+      border-color: var(--burgundy);
+    }
+
+    .photo-picker {
+      display: block;
+      border: 1px dashed var(--muted);
+      padding: 22px 16px;
+      text-align: center;
+      cursor: pointer;
+      background: #fffdf8;
+    }
+
+    .photo-picker input { display: none; }
+
+    .photo-preview {
+      display: none;
+      width: 100%;
+      max-height: 360px;
+      object-fit: cover;
+      margin-top: 14px;
+      border: 1px solid var(--line);
+    }
+
+    .photo-preview.visible { display: block; }
+
+    .photo-slot {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      margin-bottom: 14px;
+      display: grid;
+      place-items: center;
+      background: var(--parchment);
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .photo-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .submission-status {
+      margin-top: 13px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .submission-locked {
+      margin-top: 18px;
+      padding: 18px;
+      background: var(--parchment);
+      border-left: 3px solid var(--orange);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .submission-note {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+
+
+
+    .reveal-section {
+      margin-top: 30px;
+      background: var(--espresso);
+      color: var(--cream);
+      border: 1px solid var(--espresso);
+      padding: 30px;
+    }
+
+    .reveal-section.hidden { display: none; }
+
+    .reveal-header h2 {
+      margin: 8px 0 5px;
+      color: var(--cream);
+    }
+
+    .reveal-status {
+      color: #d8cec7;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .countdown {
+      margin: 24px 0;
+      padding: 20px;
+      border: 1px solid rgba(250,246,237,.2);
+      text-align: center;
+      font-family: "Playfair Display", serif;
+      font-size: 28px;
+    }
+
+    .dish-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .dish-card {
+      background: var(--cream);
+      color: var(--espresso);
+      border: 1px solid var(--line);
+      padding: 18px;
+    }
+
+    .dish-card img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      margin-bottom: 14px;
+    }
+
+    .dish-card h3 {
+      margin: 4px 0 8px;
+      font-size: 24px;
+    }
+
+    .dish-card p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .rating-box {
+      margin-top: 28px;
+      padding: 22px;
+      background: var(--cream);
+      color: var(--espresso);
+    }
+
+    .rating-box h3 {
+      margin: 0 0 6px;
+    }
+
+    .rating-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .rating-label strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .rating-label span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .rating-controls {
+      display: flex;
+      gap: 5px;
+    }
+
+    .rating-button {
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border: 1px solid var(--espresso);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--espresso);
+      font-weight: 700;
+    }
+
+    .rating-button.selected {
+      background: var(--burgundy);
+      color: white;
+      border-color: var(--burgundy);
+    }
+
+    .submit-rating {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .rating-locked {
+      padding: 16px;
+      background: var(--parchment);
+      border-left: 3px solid var(--orange);
+      color: var(--espresso);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .results-box {
+      margin-top: 28px;
+      padding: 25px;
+      background: var(--burgundy);
+      color: var(--cream);
+      text-align: center;
+    }
+
+    .results-score {
+      font-family: "Playfair Display", serif;
+      font-size: 42px;
+      margin: 10px 0;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .result-card {
+      background: rgba(250,246,237,.1);
+      padding: 15px;
+    }
+
+    .result-card strong {
+      display: block;
+      font-family: "Playfair Display", serif;
+      font-size: 22px;
+    }
+
+    @media (max-width: 700px) {
+      .dish-grid,
+      .results-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rating-row {
+        grid-template-columns: 1fr;
+      }
+
+      .rating-controls {
+        justify-content: flex-start;
+      }
+    }
+
+    @keyframes reveal {
+      0% {
+        transform: scale(.96);
+        opacity: .2;
+      }
+
+      60% {
+        transform: scale(1.03);
+        opacity: .85;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 560px) {
+
+      .container {
+        padding-top: 18px;
+      }
+
+      .roulette-card {
+        padding: 27px 20px;
+      }
+
+      .rules {
+        padding: 24px 21px;
+      }
+
+      .account-bar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .logout-button {
+        width: 100%;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <header>
+
+      <div class="eyebrow">
+        A private weekly supper club
+      </div>
+
+      <h1>
+        Winnie &amp; Bookie’s
+        <span>Kitchen Roulette</span>
+      </h1>
+
+      <div class="tagline">
+        Two kitchens. One ingredient. Zero excuses.
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="test-banner" id="testBanner">
+        TEST KITCHEN
+        <span>· this is a rehearsal before the real game begins on 4 October ·</span>
+        <button type="button" class="test-reset" onclick="resetTestKitchen()">RESET TEST</button>
+      </div>
+
+    </header>
+
+
+    <section class="login-card" id="loginCard">
+      <div class="section-kicker">Private kitchen access</div>
+      <h2 style="margin:0; font-family:'Playfair Display',serif; font-size:30px;">Who's cooking?</h2>
+      <div class="submission-note">Log in with your own account. The app will automatically know whether you're Winnie or Bookie.</div>
+
+      <form class="login-form" onsubmit="signIn(event)">
+        <label for="loginEmail">Email</label>
+        <input id="loginEmail" type="email" autocomplete="email" required>
+
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" required>
+
+        <button type="submit" id="loginButton">LOG IN</button>
+        <div class="submission-status" id="loginStatus"></div>
+      </form>
+    </section>
+
+    <div class="account-bar hidden" id="accountBar">
+      <div>
+        <div class="submission-note" style="color:#cfc2ba; margin:0;">Logged in as</div>
+        <strong id="accountPlayer">—</strong>
+      </div>
+      <button type="button" class="logout-button" onclick="signOutUser()">LOG OUT</button>
+    </div>
+
+    <main>
+
+      <section class="roulette-card">
+
+        <div class="week-label">
+          Week in play
+        </div>
+
+        <div
+          class="week-date"
+          id="weekDate"
+        >
+          Loading...
+        </div>
+
+        <div class="turn">
+
+          <span
+            class="turn-label"
+            id="turnLabel"
+          >
+            Loading...
+          </span>
+
+        </div>
+
+
+        <div
+          class="ingredient-box"
+          id="ingredientBox"
+        >
+
+          <div class="ingredient-label">
+            The ingredient
+          </div>
+
+          <div
+            class="ingredient"
+            id="ingredient"
+          >
+            ???
+          </div>
+
+          <div
+            class="description"
+            id="description"
+          >
+            The pot is waiting. One of you has to press the button.
+          </div>
+
+        </div>
+
+
+        <button
+          id="revealButton"
+          onclick="spinThePot()"
+        >
+          SPIN THE POT
+        </button>
+
+
+        <div
+          class="locked"
+          id="lockedMessage"
+        >
+          One spin. One ingredient. No take-backs.
+        </div>
+
+
+        <div class="rules">
+
+          <div class="section-kicker">
+            The house rules
+          </div>
+
+          <h2>
+            How this works
+          </h2>
+
+          <ol>
+
+            <li>
+              The weekly ingredient must feature meaningfully in your dish.
+            </li>
+
+            <li>
+              Anything goes: sweet, savoury, drink, snack, main or dessert.
+            </li>
+
+            <li>
+              You each make your own dish.
+            </li>
+
+            <li>
+              No copying the other person's idea before the reveal.
+            </li>
+
+            <li>
+              You have one week.
+            </li>
+
+            <li>
+              Photographic evidence is strongly encouraged.
+            </li>
+
+            <li>
+              Complaining about the ingredient is permitted.
+              Changing it is not.
+            </li>
+
+          </ol>
+
+        </div>
+
+      </section>
+
+
+
+      <section class="cooking-section hidden" id="cookingSection">
+
+        <div class="section-kicker">The cooking challenge</div>
+        <h2>Now make something worth arguing about.</h2>
+
+        <div id="identityArea">
+          <div class="submission-note" id="identityMessage">
+            Log in above to unlock your private kitchen.
+          </div>
+        </div>
+
+        <div id="submissionArea" style="display:none;">
+          <div class="submission-note" id="playerGreeting"></div>
+
+          <form class="submission-form" id="submissionForm" onsubmit="submitDish(event)">
+            <label for="dishName">Dish name</label>
+            <input id="dishName" name="dishName" type="text"
+              maxlength="100" placeholder="Give your creation a name" required>
+
+            <label for="dishDescription">Tell us about it</label>
+            <textarea id="dishDescription" name="dishDescription"
+              maxlength="1000" placeholder="What did you make? What was your thinking?"></textarea>
+
+            <label>Food photo</label>
+            <label class="photo-picker" for="dishPhoto">
+              <strong id="photoLabel">+ CHOOSE PHOTO</strong>
+              <div class="submission-note">One photo · JPG, PNG or WebP · max 8 MB</div>
+              <input id="dishPhoto" type="file"
+                accept="image/jpeg,image/png,image/webp"
+                onchange="previewPhoto(event)" required>
+            </label>
+
+            <img id="photoPreview" class="photo-preview" alt="Your dish preview">
+
+            <button type="submit" id="submitDishButton">LOCK IN MY DISH</button>
+            <div class="submission-status" id="submissionStatus"></div>
+          </form>
+
+          <div class="submission-locked" id="submissionLocked" style="display:none;">
+            <strong>DISH LOCKED IN.</strong><br>
+            Your submission is safely stored. The other chef cannot see it before the reveal.
+          </div>
+        </div>
+
+      </section>
+
+
+      <section class="reveal-section hidden" id="revealSection">
+
+        <div class="section-kicker">The big reveal</div>
+        <div class="reveal-header">
+          <h2>Show us what you made.</h2>
+          <div class="reveal-status" id="revealStatus">
+            The reveal happens when the cooking week ends.
+          </div>
+        </div>
+
+        <div class="countdown" id="revealCountdown"></div>
+
+        <div class="dish-grid" id="dishGrid" style="display:none;"></div>
+
+        <div class="rating-box" id="ratingBox" style="display:none;">
+          <div class="section-kicker">The judging panel</div>
+          <h3 id="ratingTitle">Rate the other kitchen.</h3>
+          <div class="submission-note" id="ratingIntro"></div>
+
+          <div id="ratingFormArea"></div>
+        </div>
+
+        <div class="results-box" id="resultsBox" style="display:none;">
+          <div class="section-kicker" style="color:var(--butter);">The verdict</div>
+          <h2>Dish of the Week</h2>
+          <div class="results-score" id="winnerName"></div>
+          <div id="winnerScore"></div>
+          <div class="results-grid" id="resultsGrid"></div>
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <footer>
+
+      <strong>
+        Winnie &amp; Bookie
+      </strong>
+
+      <br>
+
+      May the better dish win.
+
+    </footer>
+
+  </div>
+
+
+  <script>
+
+    /* =================================
+       SUPABASE
+    ================================= */
+
+    const SUPABASE_URL =
+      "https://mywlgfewdsitobzzbxbj.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_t0jIfQXkVWW5sQRWVmGUlQ_JeuYAExW";
+
+
+    /* =================================
+       INGREDIENTS
+    ================================= */
+
+    const ingredients = [
+
+      "Mango",
+      "Tamarind",
+      "Pineapple",
+      "Coconut",
+      "Plantain",
+      "Sweet Potato",
+      "Pumpkin",
+      "Passion Fruit",
+      "Peanut",
+      "Ginger",
+      "Cardamom",
+      "Cinnamon",
+      "Lemon",
+      "Lime",
+      "Orange",
+      "Apple",
+      "Pear",
+      "Banana",
+      "Papaya",
+      "Guava",
+      "Watermelon",
+      "Pomegranate",
+      "Avocado",
+      "Tomato",
+      "Carrot",
+      "Cauliflower",
+      "Broccoli",
+      "Eggplant",
+      "Cabbage",
+      "Spinach",
+      "Mushroom",
+      "Okra",
+      "Courgette",
+      "Bell Pepper",
+      "Green Beans",
+      "Corn",
+      "Potato",
+      "Cassava",
+      "Arrowroot",
+      "Chickpeas",
+      "Lentils",
+      "Rice",
+      "Oats",
+      "Quinoa",
+      "Millet",
+      "Sorghum",
+      "Coconut Milk",
+      "Yoghurt",
+      "Feta",
+      "Halloumi",
+      "Paneer",
+      "Tofu",
+      "Eggs",
+      "Chicken",
+      "Beef",
+      "Lamb",
+      "Prawns",
+      "Sardines",
+      "Tuna",
+      "Dark Chocolate",
+      "Honey",
+      "Dates",
+      "Figs",
+      "Almonds",
+      "Cashews",
+      "Walnuts",
+      "Pistachios",
+      "Sesame",
+      "Tahini",
+      "Peanut Butter",
+      "Soy Sauce",
+      "Miso",
+      "Mustard",
+      "Balsamic Vinegar",
+      "Apple Cider Vinegar",
+      "Turmeric",
+      "Chilli",
+      "Garlic",
+      "Onion",
+      "Basil",
+      "Mint",
+      "Coriander",
+      "Rosemary",
+      "Fennel",
+      "Celery",
+      "Leek",
+      "Asparagus",
+      "Beetroot",
+      "Kale",
+      "Brussels Sprouts",
+      "Jackfruit",
+      "Star Fruit",
+      "Kiwi",
+      "Lychee",
+      "Cherries",
+      "Apricot",
+      "Peach",
+      "Plum",
+      "Raspberry",
+      "Strawberry",
+      "Blueberry",
+      "Cocoa",
+      "Coffee",
+      "Vanilla",
+      "Molasses",
+      "Maple Syrup",
+      "Puff Pastry",
+      "Bread",
+      "Polenta"
+
+    ];
+
+
+    /* =================================
+       START DATE
+       WEEK 1 = 4 OCTOBER 2026
+    ================================= */
+
+    const startDate =
+      new Date("2026-10-04T00:00:00");
+
+    /*
+     * TEST MODE
+     * Before the real launch date, the same website runs a rehearsal.
+     * The rehearsal never writes to Supabase and disappears on refresh.
+     * On 4 October 2026 the site automatically switches to the real game.
+     */
+    const TEST_MODE = new Date() < startDate;
+
+    let testChallenge = null;
+    let testSubmission = null;
+    let testRatings = [];
+    let testPhotoUrl = null;
+
+
+    /* =================================
+       SUPABASE REQUEST
+    ================================= */
+
+    let accessToken = null;
+
+    async function refreshAccessToken() {
+      const response = await fetch(
+        SUPABASE_URL + "/auth/v1/token?grant_type=password",
+        {
+          method: "POST",
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+      return response;
+    }
+
+    async function getAccessToken() {
+      if (accessToken) return accessToken;
+
+      const sessionResponse = await fetch(
+        SUPABASE_URL + "/auth/v1/session",
+        {
+          headers: {
+            "apikey": SUPABASE_KEY
+          }
+        }
+      );
+
+      if (!sessionResponse.ok) return null;
+      const session = await sessionResponse.json();
+      accessToken = session?.access_token || null;
+      return accessToken;
+    }
+
+    async function supabaseRequest(endpoint, options = {}) {
+      const token = await getAccessToken();
+
+      return await fetch(
+        SUPABASE_URL + "/rest/v1/" + endpoint,
+        {
+          ...options,
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": "Bearer " + (token || SUPABASE_KEY),
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+          }
+        }
+      );
+    }
+
+    async function authRequest(path, options = {}) {
+      return await fetch(
+        SUPABASE_URL + "/auth/v1/" + path,
+        {
+          ...options,
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+          }
+        }
+      );
+    }
+
+    /* =================================
+       WEEK START
+    ================================= */
+
+    function getWeekStart() {
+
+      const today =
+        new Date();
+
+
+      if (today < startDate) {
+
+        return new Date(
+          startDate
+        );
+
+      }
+
+
+      const day =
+        today.getDay();
+
+
+      const sunday =
+        new Date(today);
+
+
+      sunday.setDate(
+        today.getDate() -
+        day
+      );
+
+
+      sunday.setHours(
+        0,
+        0,
+        0,
+        0
+      );
+
+
+      return sunday;
+
+    }
+
+
+    /* =================================
+       WEEK NUMBER
+    ================================= */
+
+    function getWeekNumber(
+      date
+    ) {
+
+      const difference =
+        date.getTime() -
+        startDate.getTime();
+
+
+      const days =
+        Math.floor(
+          difference /
+          (1000 * 60 * 60 * 24)
+        );
+
+
+      if (days < 0) {
+        return 1;
+      }
+
+      return Math.floor(days / 7) + 1;
+
+    }
+
+
+    /* =================================
+       WHO SPINS?
+       WEEK 1 BOOKIE
+       WEEK 2 WINNIE
+    ================================= */
+
+    function getSpinner(
+      weekNumber
+    ) {
+
+      return weekNumber % 2 === 1
+        ? "Bookie"
+        : "Winnie";
+
+    }
+
+
+    /* =================================
+       DATE FORMAT
+    ================================= */
+
+    function formatDate(
+      date
+    ) {
+
+      return date.toLocaleDateString(
+        "en-GB",
+        {
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        }
+      );
+
+    }
+
+
+    /* =================================
+       SHOW WEEK
+    ================================= */
+
+    function showWeekDate() {
+
+      const weekStart =
+        getWeekStart();
+
+
+      const weekEnd =
+        new Date(
+          weekStart
+        );
+
+
+      weekEnd.setDate(
+        weekStart.getDate() +
+        6
+      );
+
+
+      document.getElementById(
+        "weekDate"
+      ).textContent =
+
+        formatDate(
+          weekStart
+        ) +
+
+        " – " +
+
+        formatDate(
+          weekEnd
+        );
+
+    }
+
+
+    /* =================================
+       RANDOM INGREDIENT
+    ================================= */
+
+    function chooseIngredient() {
+
+      const index =
+        Math.floor(
+          Math.random() *
+          ingredients.length
+        );
+
+
+      return ingredients[index];
+
+    }
+
+
+    /* =================================
+       GET CURRENT CHALLENGE
+    ================================= */
+
+    async function getCurrentChallenge() {
+
+      if (TEST_MODE) {
+        return testChallenge;
+      }
+
+      const weekNumber =
+        getWeekNumber(
+          getWeekStart()
+        );
+
+      const response =
+        await supabaseRequest(
+          "potluck_weeks" +
+          "?week_number=eq." +
+          weekNumber +
+          "&select=*"
+        );
+
+      if (!response.ok) {
+        console.error(
+          "Could not load challenge",
+          await response.text()
+        );
+        return null;
+      }
+
+      const data =
+        await response.json();
+
+      return data.length
+        ? data[0]
+        : null;
+    }
+
+
+    /* =================================
+       DISPLAY CHALLENGE
+    ================================= */
+
+    function displayChallenge(
+      challenge
+    ) {
+
+      const ingredient =
+        document.getElementById(
+          "ingredient"
+        );
+
+
+      const description =
+        document.getElementById(
+          "description"
+        );
+
+
+      const button =
+        document.getElementById(
+          "revealButton"
+        );
+
+
+      const locked =
+        document.getElementById(
+          "lockedMessage"
+        );
+
+
+      const turnLabel =
+        document.getElementById(
+          "turnLabel"
+        );
+
+
+      ingredient.textContent =
+        challenge.ingredient;
+
+
+      description.textContent =
+
+        "Both of you cook. " +
+
+        "Anything goes — just make " +
+
+        challenge.ingredient.toLowerCase() +
+
+        " matter.";
+
+
+      button.textContent =
+        "INGREDIENT LOCKED";
+
+
+      button.disabled =
+        true;
+
+
+      button.style.opacity =
+        "0.55";
+
+
+      button.style.cursor =
+        "default";
+
+
+      turnLabel.textContent =
+
+        "SPUN BY " +
+
+        challenge.spun_by.toUpperCase();
+
+
+      locked.textContent =
+
+        "Spun by " +
+
+        challenge.spun_by +
+
+        ". No rerolls. Both of you are cooking this.";
+
+    }
+
+
+    /* =================================
+       SHOW SPINNER
+    ================================= */
+
+    function showSpinner() {
+
+      const weekNumber =
+        getWeekNumber(
+          getWeekStart()
+        );
+
+      const spinner =
+        getSpinner(
+          weekNumber
+        );
+
+      const button = document.getElementById("revealButton");
+
+      if (TEST_MODE) {
+        document.getElementById("turnLabel").textContent =
+          spinner.toUpperCase() + "'S TEST SPIN";
+        button.textContent = testChallenge
+          ? "INGREDIENT LOCKED"
+          : "SPIN THE POT";
+        button.disabled = Boolean(testChallenge);
+        button.style.opacity = testChallenge ? "0.55" : "1";
+        button.style.cursor = testChallenge ? "default" : "pointer";
+        return;
+      }
+
+      const beforeStart = new Date() < startDate;
+
+      document.getElementById(
+        "turnLabel"
+      ).textContent = beforeStart
+        ? "STARTS 4 OCTOBER"
+        : spinner.toUpperCase() + "'S TURN TO SPIN";
+
+      button.textContent = beforeStart ? "STARTS 4 OCTOBER" : "SPIN THE POT";
+      button.disabled = beforeStart;
+      button.style.opacity = beforeStart ? "0.55" : "1";
+      button.style.cursor = beforeStart ? "default" : "pointer";
+    }
+
+
+    /* =================================
+       SAVE CHALLENGE
+    ================================= */
+
+    async function saveChallenge(
+
+      weekNumber,
+
+      ingredient,
+
+      spinner
+
+    ) {
+
+      if (TEST_MODE) {
+        testChallenge = {
+          id: "TEST",
+          week_number: weekNumber,
+          start_date: "2026-10-02",
+          ingredient: ingredient,
+          spun_by: spinner,
+          spun_at: new Date().toISOString()
+        };
+        return testChallenge;
+      }
+
+      const response =
+
+        await supabaseRequest(
+
+          "potluck_weeks",
+
+          {
+
+            method: "POST",
+
+            headers: {
+
+              "Prefer":
+                "return=representation"
+
+            },
+
+            body:
+
+              JSON.stringify({
+
+                week_number:
+                  weekNumber,
+
+                start_date:
+
+                  getWeekStart()
+
+                    .toISOString()
+
+                    .split("T")[0],
+
+                ingredient:
+                  ingredient,
+
+                spun_by:
+                  spinner,
+
+                spun_at:
+
+                  new Date()
+
+                    .toISOString()
+
+              })
+
+          }
+
+        );
+
+
+      if (
+        response.status === 409
+      ) {
+
+        return await
+          getCurrentChallenge();
+
+      }
+
+
+      if (!response.ok) {
+
+        console.error(
+
+          "Could not save challenge",
+
+          await response.text()
+
+        );
+
+        return null;
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      return data[0];
+
+    }
+
+
+    /* =================================
+       SPIN THE POT
+    ================================= */
+
+    async function spinThePot() {
+
+      if (TEST_MODE) {
+        if (testChallenge) {
+          displayChallenge(testChallenge);
+          return;
+        }
+
+        const weekNumber = getWeekNumber(getWeekStart());
+        const spinner = getSpinner(weekNumber);
+        const button = document.getElementById("revealButton");
+        const ingredient = document.getElementById("ingredient");
+        const description = document.getElementById("description");
+        const box = document.getElementById("ingredientBox");
+
+        button.disabled = true;
+        button.textContent = "SPINNING...";
+
+        const spinDuration = 1200;
+        const intervalTime = 80;
+
+        const spinInterval = setInterval(() => {
+          ingredient.textContent =
+            ingredients[Math.floor(Math.random() * ingredients.length)];
+        }, intervalTime);
+
+        setTimeout(async () => {
+          clearInterval(spinInterval);
+
+          const selectedIngredient = chooseIngredient();
+          ingredient.textContent = selectedIngredient;
+          description.textContent = "Saving the test challenge...";
+
+          box.classList.remove("revealing");
+          void box.offsetWidth;
+          box.classList.add("revealing");
+
+          const challenge = await saveChallenge(
+            weekNumber,
+            selectedIngredient,
+            spinner
+          );
+
+          displayChallenge(challenge);
+          showCookingSection();
+          showRevealSection();
+        }, spinDuration);
+
+        return;
+      }
+
+      if (new Date() < startDate) {
+        return;
+      }
+
+      const button =
+        document.getElementById(
+          "revealButton"
+        );
+
+      const ingredient =
+        document.getElementById(
+          "ingredient"
+        );
+
+      const description =
+        document.getElementById(
+          "description"
+        );
+
+      const box =
+        document.getElementById(
+          "ingredientBox"
+        );
+
+      const existing =
+        await getCurrentChallenge();
+
+      if (existing) {
+        displayChallenge(
+          existing
+        );
+        return;
+      }
+
+      const weekNumber =
+        getWeekNumber(
+          getWeekStart()
+        );
+
+      const spinner =
+        getSpinner(
+          weekNumber
+        );
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "SPINNING...";
+
+      const spinDuration =
+        1800;
+
+      const intervalTime =
+        90;
+
+      const spinInterval =
+        setInterval(
+          () => {
+            ingredient.textContent =
+              ingredients[
+                Math.floor(
+                  Math.random() *
+                  ingredients.length
+                )
+              ];
+          },
+          intervalTime
+        );
+
+      setTimeout(
+        async () => {
+
+          clearInterval(
+            spinInterval
+          );
+
+          const selectedIngredient =
+            chooseIngredient();
+
+          ingredient.textContent =
+            selectedIngredient;
+
+          description.textContent =
+            "Saving the official challenge...";
+
+          box.classList.remove(
+            "revealing"
+          );
+
+          void box.offsetWidth;
+
+          box.classList.add(
+            "revealing"
+          );
+
+          const challenge =
+            await saveChallenge(
+              weekNumber,
+              selectedIngredient,
+              spinner
+            );
+
+          if (!challenge) {
+
+            button.disabled =
+              false;
+
+            button.textContent =
+              "TRY AGAIN";
+
+            description.textContent =
+              "Something went wrong. The pot refused to cooperate.";
+
+            return;
+          }
+
+          displayChallenge(
+            challenge
+          );
+
+          showCookingSection();
+          showRevealSection();
+
+        },
+        spinDuration
+      );
+    }
+
+
+
+    /* =================================
+       AUTHENTICATION + COOKING SUBMISSION
+    ================================= */
+
+    let selectedPlayer = null;
+    let currentSubmission = null;
+
+    async function signIn(event) {
+      event.preventDefault();
+
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+      const button = document.getElementById("loginButton");
+      const status = document.getElementById("loginStatus");
+
+      button.disabled = true;
+      button.textContent = "LOGGING IN...";
+      status.textContent = "";
+
+      const response = await authRequest("token?grant_type=password", {
+        method: "POST",
+        body: JSON.stringify({ email, password })
+      });
+
+      if (!response.ok) {
+        status.textContent = "Login failed. Check the email and password and try again.";
+        button.disabled = false;
+        button.textContent = "LOG IN";
+        return;
+      }
+
+      const session = await response.json();
+      accessToken = session.access_token;
+      localStorage.setItem("kitchenRouletteAccessToken", accessToken);
+      localStorage.setItem("kitchenRouletteRefreshToken", session.refresh_token || "");
+
+      await initialiseAuthenticatedUser();
+
+      button.disabled = false;
+      button.textContent = "LOG IN";
+    }
+
+    async function restoreSession() {
+      const refreshToken = localStorage.getItem("kitchenRouletteRefreshToken");
+      if (!refreshToken) return false;
+
+      const response = await authRequest("token?grant_type=refresh_token", {
+        method: "POST",
+        body: JSON.stringify({ refresh_token: refreshToken })
+      });
+
+      if (!response.ok) {
+        localStorage.removeItem("kitchenRouletteAccessToken");
+        localStorage.removeItem("kitchenRouletteRefreshToken");
+        return false;
+      }
+
+      const session = await response.json();
+      accessToken = session.access_token;
+      localStorage.setItem("kitchenRouletteAccessToken", accessToken);
+      localStorage.setItem("kitchenRouletteRefreshToken", session.refresh_token || refreshToken);
+      return true;
+    }
+
+    async function initialiseAuthenticatedUser() {
+      const response = await supabaseRequest(
+        "potluck_players?id=eq." + encodeURIComponent(await getUserId()) + "&select=player"
+      );
+
+      if (!response.ok) {
+        console.error("Could not identify player", await response.text());
+        document.getElementById("loginStatus").textContent = "Your account could not be matched to a Kitchen Roulette player.";
+        return;
+      }
+
+      const rows = await response.json();
+
+      if (!rows.length) {
+        document.getElementById("loginStatus").textContent = "This account has not been assigned to Winnie or Bookie yet.";
+        return;
+      }
+
+      selectedPlayer = rows[0].player;
+      localStorage.setItem("kitchenRoulettePlayer", selectedPlayer);
+
+      document.getElementById("loginCard").classList.add("hidden");
+      document.getElementById("accountBar").classList.remove("hidden");
+      document.getElementById("accountPlayer").textContent = selectedPlayer;
+      document.getElementById("identityMessage").textContent =
+        "Cooking as " + selectedPlayer + ". Your submission is private until reveal.";
+
+      showCookingSection();
+      await loadMySubmission();
+
+      if (TEST_MODE && testChallenge) {
+        showRevealSection();
+      } else if (isRevealOpen()) {
+        await loadRevealData();
+      }
+    }
+
+    async function getUserId() {
+      const response = await authRequest("user", {
+        headers: {
+          "Authorization": "Bearer " + accessToken
+        }
+      });
+
+      if (!response.ok) return null;
+      const user = await response.json();
+      return user.id;
+    }
+
+    async function signOutUser() {
+      if (accessToken) {
+        await authRequest("logout", {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer " + accessToken
+          }
+        });
+      }
+
+      accessToken = null;
+      selectedPlayer = null;
+      localStorage.removeItem("kitchenRouletteAccessToken");
+      localStorage.removeItem("kitchenRouletteRefreshToken");
+      localStorage.removeItem("kitchenRoulettePlayer");
+      window.location.reload();
+    }
+
+    function showCookingSection() {
+      const section = document.getElementById("cookingSection");
+      if (!section) return;
+      section.classList.remove("hidden");
+
+      if (!selectedPlayer) {
+        document.getElementById("submissionArea").style.display = "none";
+        return;
+      }
+
+      document.getElementById("submissionArea").style.display = "block";
+      document.getElementById("playerGreeting").textContent =
+        "Cooking as " + selectedPlayer + ". Your submission is private until reveal.";
+    }
+
+    async function loadMySubmission() {
+      if (!selectedPlayer || !accessToken) return;
+
+      if (TEST_MODE) {
+        if (testSubmission) {
+          currentSubmission = testSubmission;
+          showLockedSubmission(testSubmission);
+        }
+        return;
+      }
+
+      const weekNumber = getWeekNumber(getWeekStart());
+      const response = await supabaseRequest(
+        "potluck_submissions" +
+        "?week_number=eq." + encodeURIComponent(weekNumber) +
+        "&player=eq." + encodeURIComponent(selectedPlayer) +
+        "&select=*"
+      );
+
+      if (!response.ok) {
+        console.error("Could not load submission", await response.text());
+        return;
+      }
+
+      const data = await response.json();
+      currentSubmission = data.length ? data[0] : null;
+
+      if (currentSubmission) {
+        showLockedSubmission(currentSubmission);
+      }
+    }
+
+    function previewPhoto(event) {
+      const file = event.target.files[0];
+      const preview = document.getElementById("photoPreview");
+      const label = document.getElementById("photoLabel");
+      const status = document.getElementById("submissionStatus");
+
+      if (!file) return;
+
+      if (file.size > 8 * 1024 * 1024) {
+        event.target.value = "";
+        preview.classList.remove("visible");
+        status.textContent = "That photo is over 8 MB. Please choose a smaller one.";
+        return;
+      }
+
+      const allowed = ["image/jpeg", "image/png", "image/webp"];
+
+      if (!allowed.includes(file.type)) {
+        event.target.value = "";
+        preview.classList.remove("visible");
+        status.textContent = "Please choose a JPG, PNG or WebP image.";
+        return;
+      }
+
+      preview.src = URL.createObjectURL(file);
+      preview.classList.add("visible");
+      label.textContent = "CHANGE PHOTO";
+      status.textContent = "";
+    }
+
+    function safeFileName(name) {
+      return name.toLowerCase()
+        .replace(/[^a-z0-9._-]+/g, "-")
+        .replace(/-+/g, "-");
+    }
+
+    async function uploadDishPhoto(file, weekNumber, player) {
+      const extension = file.name.split(".").pop().toLowerCase() || "jpg";
+      const filePath =
+        "week/" + weekNumber + "/" + player + "/" +
+        Date.now() + "-" + safeFileName(file.name.replace(/\.[^/.]+$/, "")) +
+        "." + extension;
+
+      const response = await fetch(
+        SUPABASE_URL + "/storage/v1/object/potluck-photos/" + filePath,
+        {
+          method: "POST",
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": "Bearer " + accessToken,
+            "Content-Type": file.type,
+            "x-upsert": "false"
+          },
+          body: file
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Photo upload failed: " + await response.text());
+      }
+
+      return filePath;
+    }
+
+    async function createSignedPhotoUrl(filePath) {
+      if (!filePath || !accessToken) return null;
+
+      const response = await fetch(
+        SUPABASE_URL + "/storage/v1/object/sign/potluck-photos/" + filePath,
+        {
+          method: "POST",
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": "Bearer " + accessToken,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ expiresIn: 3600 })
+        }
+      );
+
+      if (!response.ok) {
+        console.error("Could not create signed photo URL", await response.text());
+        return null;
+      }
+
+      const data = await response.json();
+      return SUPABASE_URL + "/storage/v1" + data.signedURL;
+    }
+
+    async function submitDish(event) {
+      event.preventDefault();
+
+      if (!selectedPlayer || !accessToken) return;
+
+      const weekNumber = getWeekNumber(getWeekStart());
+      const dishName = document.getElementById("dishName").value.trim();
+      const description = document.getElementById("dishDescription").value.trim();
+      const photoInput = document.getElementById("dishPhoto");
+      const button = document.getElementById("submitDishButton");
+      const status = document.getElementById("submissionStatus");
+
+      if (!dishName) {
+        status.textContent = "Give your dish a name first.";
+        return;
+      }
+
+      if (!photoInput.files.length) {
+        status.textContent = "Please choose a photo.";
+        return;
+      }
+
+      if (TEST_MODE) {
+        button.disabled = true;
+        button.textContent = "LOCKING IN...";
+        status.textContent = "Saving your test masterpiece...";
+
+        const file = photoInput.files[0];
+        testPhotoUrl = URL.createObjectURL(file);
+
+        testSubmission = {
+          id: "TEST-SUBMISSION",
+          week_number: weekNumber,
+          player: selectedPlayer,
+          dish_name: dishName,
+          description: description,
+          photo_url: testPhotoUrl,
+          submitted_at: new Date().toISOString()
+        };
+
+        currentSubmission = testSubmission;
+        showLockedSubmission(testSubmission);
+
+        await loadRevealData();
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "UPLOADING...";
+      status.textContent = "Saving your masterpiece...";
+
+      try {
+        const photoPath = await uploadDishPhoto(
+          photoInput.files[0], weekNumber, selectedPlayer
+        );
+
+        const response = await supabaseRequest(
+          "potluck_submissions",
+          {
+            method: "POST",
+            headers: { "Prefer": "return=representation" },
+            body: JSON.stringify({
+              week_number: weekNumber,
+              player: selectedPlayer,
+              dish_name: dishName,
+              description: description,
+              photo_url: photoPath,
+              submitted_at: new Date().toISOString()
+            })
+          }
+        );
+
+        if (response.status === 409) {
+          await loadMySubmission();
+          throw new Error("You already submitted a dish for this week.");
+        }
+
+        if (!response.ok) {
+          throw new Error("Submission failed: " + await response.text());
+        }
+
+        const data = await response.json();
+        currentSubmission = data[0];
+        showLockedSubmission(currentSubmission);
+
+      } catch (error) {
+        console.error(error);
+        status.textContent = error.message;
+        button.disabled = false;
+        button.textContent = "LOCK IN MY DISH";
+      }
+    }
+
+    function showLockedSubmission(submission) {
+      document.getElementById("submissionForm").style.display = "none";
+      document.getElementById("submissionLocked").style.display = "block";
+
+      document.getElementById("submissionLocked").innerHTML =
+        "<strong>DISH LOCKED IN.</strong><br>" +
+        "Your submission is safely stored. The other chef cannot see it before the reveal." +
+        "<div class='submission-note'>Submitted as " +
+        escapeHtml(submission.player) + " · " + escapeHtml(submission.dish_name) + "</div>";
+    }
+
+
+    /* =================================
+       REVEAL + RATING
+    ================================= */
+
+    let currentSubmissions = [];
+    let currentRatings = [];
+    let countdownTimer = null;
+    const ratingValues = {};
+
+    function getRevealDate() {
+      const revealDate = new Date(getWeekStart());
+      revealDate.setDate(revealDate.getDate() + 7);
+      revealDate.setHours(0, 0, 0, 0);
+      return revealDate;
+    }
+
+    function isRevealOpen() {
+      if (TEST_MODE) {
+        return Boolean(testSubmission);
+      }
+      return new Date() >= getRevealDate();
+    }
+
+    function getOtherPlayer() {
+      if (selectedPlayer === "Winnie") return "Bookie";
+      if (selectedPlayer === "Bookie") return "Winnie";
+      return null;
+    }
+
+    function formatCountdown(milliseconds) {
+      if (milliseconds <= 0) return "THE REVEAL IS OPEN";
+      const totalSeconds = Math.floor(milliseconds / 1000);
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    function showRevealSection() {
+      const section = document.getElementById("revealSection");
+      if (!section) return;
+      section.classList.remove("hidden");
+      updateRevealState();
+    }
+
+    async function updateRevealState() {
+      const countdown = document.getElementById("revealCountdown");
+      const status = document.getElementById("revealStatus");
+      if (!countdown) return;
+
+      if (TEST_MODE) {
+        if (!testSubmission) {
+          status.textContent = "Submit your test dish to unlock the instant reveal.";
+          countdown.textContent = "TEST REVEAL: WAITING FOR YOUR DISH";
+          return;
+        }
+
+        status.textContent = "Test reveal open. This rehearsal does not affect the real game.";
+        countdown.textContent = "THE TEST REVEAL IS OPEN";
+        await loadRevealData();
+        return;
+      }
+
+      if (!isRevealOpen()) {
+        const revealDate = getRevealDate();
+        status.textContent =
+          "Submissions stay locked until " + formatDate(revealDate) + ". No peeking.";
+        countdown.textContent = formatCountdown(revealDate.getTime() - Date.now());
+
+        if (countdownTimer) clearInterval(countdownTimer);
+        countdownTimer = setInterval(() => {
+          const remaining = revealDate.getTime() - Date.now();
+          countdown.textContent = formatCountdown(remaining);
+          if (remaining <= 0) {
+            clearInterval(countdownTimer);
+            updateRevealState();
+          }
+        }, 1000);
+        return;
+      }
+
+      status.textContent = "The week is over. Time to see what the other kitchen did.";
+      countdown.textContent = "THE REVEAL IS OPEN";
+      await loadRevealData();
+    }
+
+    async function loadRevealData() {
+
+      if (TEST_MODE) {
+        if (!testChallenge || !testSubmission) {
+          return;
+        }
+
+        currentSubmissions = [
+          {
+            id: "TEST-WINNIE",
+            week_number: testChallenge.week_number,
+            player: selectedPlayer === "Winnie" ? "Bookie" : "Winnie",
+            dish_name: "Winnie's Test Dish",
+            description: "A deliberately fake dish for the rehearsal. The real dish stays secret until launch.",
+            photo_url: null
+          },
+          testSubmission
+        ];
+
+        currentRatings = testRatings;
+        renderRevealSubmissions();
+        renderRatingArea();
+        renderResults();
+        return;
+      }
+
+      const weekNumber = getWeekNumber(getWeekStart());
+      const response = await supabaseRequest(
+        "potluck_submissions" +
+        "?week_number=eq." + encodeURIComponent(weekNumber) +
+        "&select=*&order=player.asc"
+      );
+
+      if (!response.ok) {
+        console.error("Could not load reveal submissions", await response.text());
+        return;
+      }
+
+      currentSubmissions = await response.json();
+      renderRevealSubmissions();
+      await loadRatings();
+      renderRatingArea();
+      renderResults();
+    }
+
+    async function renderRevealSubmissions() {
+      const grid = document.getElementById("dishGrid");
+      grid.style.display = "grid";
+
+      if (!currentSubmissions.length) {
+        grid.innerHTML = "<div class='reveal-status'>No dishes have been submitted yet.</div>";
+        return;
+      }
+
+      grid.innerHTML = currentSubmissions.map((submission) => `
+        <article class="dish-card" data-player="${escapeHtml(submission.player)}">
+          <div class="photo-slot" data-photo-path="${escapeHtml(submission.photo_url || "")}">
+            ${submission.photo_url ? "Loading photo..." : ""}
+          </div>
+          <div class="section-kicker">${escapeHtml(submission.player)}</div>
+          <h3>${escapeHtml(submission.dish_name)}</h3>
+          <p>${escapeHtml(submission.description || "No description. Let the food speak for itself.")}</p>
+        </article>
+      `).join("");
+
+      for (const submission of currentSubmissions) {
+        if (!submission.photo_url) continue;
+
+        const url = TEST_MODE
+          ? submission.photo_url
+          : await createSignedPhotoUrl(submission.photo_url);
+        const slot = grid.querySelector(`[data-photo-path="${CSS.escape(submission.photo_url)}"]`);
+        if (slot && url) {
+          slot.innerHTML = `<img src="${url}" alt="${escapeHtml(submission.dish_name)}">`;
+        }
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    async function loadRatings() {
+      if (TEST_MODE) {
+        currentRatings = testRatings;
+        return;
+      }
+
+      const weekNumber = getWeekNumber(getWeekStart());
+      const response = await supabaseRequest(
+        "potluck_ratings" +
+        "?week_number=eq." + encodeURIComponent(weekNumber) +
+        "&select=*"
+      );
+
+      if (!response.ok) {
+        console.error("Could not load ratings", await response.text());
+        currentRatings = [];
+        return;
+      }
+
+      currentRatings = await response.json();
+    }
+
+    function renderRatingArea() {
+      const box = document.getElementById("ratingBox");
+      const area = document.getElementById("ratingFormArea");
+      const title = document.getElementById("ratingTitle");
+      const intro = document.getElementById("ratingIntro");
+
+      box.style.display = "block";
+
+      if (!selectedPlayer) {
+        title.textContent = "Choose your kitchen first.";
+        intro.textContent = "Select Winnie or Bookie above to submit your rating.";
+        area.innerHTML = "";
+        return;
+      }
+
+      const otherPlayer = getOtherPlayer();
+      const existing = currentRatings.find((rating) => rating.rater === selectedPlayer);
+
+      if (!currentSubmissions.find((submission) => submission.player === otherPlayer)) {
+        title.textContent = `Waiting for ${otherPlayer}'s dish.`;
+        intro.textContent = "The rating card will appear once the other kitchen has submitted.";
+        area.innerHTML = "";
+        return;
+      }
+
+      title.textContent = `Rate ${otherPlayer}'s dish.`;
+      intro.textContent = "Score each category from 1 to 5. You cannot rate your own dish.";
+
+      if (existing) {
+        area.innerHTML = `
+          <div class="rating-locked">
+            <strong>RATING LOCKED.</strong><br>
+            You gave ${otherPlayer} <strong>${existing.total}/20</strong>.<br>
+            No changing your mind after the judge's gavel falls.
+          </div>
+        `;
+        return;
+      }
+
+      const categories = [
+        ["taste", "Taste", "How good was it to eat?"],
+        ["creativity", "Creativity", "How inventive was the interpretation?"],
+        ["ingredient_use", "Ingredient use", "How well did they make the ingredient matter?"],
+        ["presentation", "Presentation", "How appealing did the finished dish look?"]
+      ];
+
+      area.innerHTML = categories.map(([key, label, hint]) => `
+        <div class="rating-row">
+          <div class="rating-label">
+            <strong>${label}</strong>
+            <span>${hint}</span>
+          </div>
+          <div class="rating-controls">
+            ${[1,2,3,4,5].map((value) => `
+              <button type="button" class="rating-button" data-category="${key}" data-value="${value}" onclick="setRating('${key}', ${value})">${value}</button>
+            `).join("")}
+          </div>
+        </div>
+      `).join("") + `
+        <button type="button" class="submit-rating" onclick="submitRating()">LOCK IN MY RATING</button>
+        <div class="submission-status" id="ratingStatus"></div>
+      `;
+    }
+
+    function setRating(category, value) {
+      ratingValues[category] = value;
+      document.querySelectorAll(`.rating-button[data-category="${category}"]`).forEach((button) => {
+        button.classList.toggle("selected", Number(button.dataset.value) === value);
+      });
+    }
+
+    async function submitRating() {
+      if (!selectedPlayer) return;
+      const otherPlayer = getOtherPlayer();
+      const required = ["taste", "creativity", "ingredient_use", "presentation"];
+      const status = document.getElementById("ratingStatus");
+
+      if (required.some((key) => !ratingValues[key])) {
+        status.textContent = "Give every category a score from 1 to 5.";
+        return;
+      }
+
+      const total = required.reduce((sum, key) => sum + Number(ratingValues[key]), 0);
+      const weekNumber = getWeekNumber(getWeekStart());
+      const button = document.querySelector(".submit-rating");
+
+      if (TEST_MODE) {
+        button.disabled = true;
+        status.textContent = "Locking in your test verdict...";
+
+        testRatings = [
+          {
+            id: "TEST-WINNIE-RATING",
+            week_number: weekNumber,
+            rater: otherPlayer,
+            rated_player: selectedPlayer,
+            taste: 5,
+            creativity: 4,
+            ingredient_use: 4,
+            presentation: 4,
+            total: 17
+          },
+          {
+            id: "TEST-BOOKIE-RATING",
+            week_number: weekNumber,
+            rater: selectedPlayer,
+            rated_player: otherPlayer,
+            taste: Number(ratingValues.taste),
+            creativity: Number(ratingValues.creativity),
+            ingredient_use: Number(ratingValues.ingredient_use),
+            presentation: Number(ratingValues.presentation),
+            total: total
+          }
+        ];
+
+        currentRatings = testRatings;
+        renderRatingArea();
+        renderResults();
+        return;
+      }
+      button.disabled = true;
+      status.textContent = "Locking in your verdict...";
+
+      const response = await supabaseRequest("potluck_ratings", {
+        method: "POST",
+        headers: { "Prefer": "return=representation" },
+        body: JSON.stringify({
+          week_number: weekNumber,
+          rater: selectedPlayer,
+          rated_player: otherPlayer,
+          taste: Number(ratingValues.taste),
+          creativity: Number(ratingValues.creativity),
+          ingredient_use: Number(ratingValues.ingredient_use),
+          presentation: Number(ratingValues.presentation),
+          total: total,
+          submitted_at: new Date().toISOString()
+        })
+      });
+
+      if (!response.ok) {
+        status.textContent = "That rating could not be saved. Please try again.";
+        button.disabled = false;
+        console.error(await response.text());
+        return;
+      }
+
+      ratingValues.taste = undefined;
+      ratingValues.creativity = undefined;
+      ratingValues.ingredient_use = undefined;
+      ratingValues.presentation = undefined;
+
+      await loadRatings();
+      renderRatingArea();
+      renderResults();
+    }
+
+    function renderResults() {
+      const box = document.getElementById("resultsBox");
+      if (currentRatings.length < 2) {
+        box.style.display = "none";
+        return;
+      }
+
+      const winnieRating = currentRatings.find((rating) => rating.rated_player === "Winnie");
+      const bookieRating = currentRatings.find((rating) => rating.rated_player === "Bookie");
+
+      if (!winnieRating || !bookieRating) {
+        box.style.display = "none";
+        return;
+      }
+
+      const scores = {
+        Winnie: Number(winnieRating.total),
+        Bookie: Number(bookieRating.total)
+      };
+
+      const winner = scores.Winnie === scores.Bookie ? "IT'S A DRAW" :
+        (scores.Winnie > scores.Bookie ? "WINNIE" : "BOOKIE");
+
+      document.getElementById("winnerName").textContent = winner;
+      document.getElementById("winnerScore").textContent =
+        winner === "IT'S A DRAW"
+          ? `${scores.Winnie}/20 each`
+          : `${scores[winner === "WINNIE" ? "Winnie" : "Bookie"]}/20`;
+
+      document.getElementById("resultsGrid").innerHTML = `
+        <div class="result-card">
+          <span>WINNIE</span>
+          <strong>${scores.Winnie}/20</strong>
+        </div>
+        <div class="result-card">
+          <span>BOOKIE</span>
+          <strong>${scores.Bookie}/20</strong>
+        </div>
+      `;
+
+      box.style.display = "block";
+    }
+
+
+    /* =================================
+       INITIALISE
+    ================================= */
+
+    async function initialise() {
+
+      showWeekDate();
+
+      const banner = document.getElementById("testBanner");
+      if (TEST_MODE) {
+        banner.classList.add("visible");
+      } else {
+        banner.classList.remove("visible");
+      }
+
+      showSpinner();
+
+      accessToken = localStorage.getItem("kitchenRouletteAccessToken") || null;
+      const restored = accessToken ? await restoreSession() : false;
+
+      const challenge = await getCurrentChallenge();
+
+      if (challenge) {
+        displayChallenge(challenge);
+        showCookingSection();
+        if (TEST_MODE && testSubmission) {
+          showRevealSection();
+        } else if (!TEST_MODE) {
+          showRevealSection();
+        }
+      }
+
+      if (restored) {
+        await initialiseAuthenticatedUser();
+      }
+    }
+
+    function resetTestKitchen() {
+      if (!TEST_MODE) return;
+
+      testChallenge = null;
+      testSubmission = null;
+      testRatings = [];
+      testPhotoUrl = null;
+      currentSubmission = null;
+      currentSubmissions = [];
+      currentRatings = [];
+
+      document.getElementById("ingredient").textContent = "???";
+      document.getElementById("description").textContent =
+        "The pot is waiting. One of you has to press the button.";
+      document.getElementById("turnLabel").textContent =
+        getSpinner(1).toUpperCase() + "'S TEST SPIN";
+
+      const button = document.getElementById("revealButton");
+      button.textContent = "SPIN THE POT";
+      button.disabled = false;
+      button.style.opacity = "1";
+      button.style.cursor = "pointer";
+
+      document.getElementById("revealSection").classList.add("hidden");
+      document.getElementById("dishGrid").style.display = "none";
+      document.getElementById("dishGrid").innerHTML = "";
+      document.getElementById("ratingBox").style.display = "none";
+      document.getElementById("resultsBox").style.display = "none";
+
+      document.getElementById("submissionForm").reset();
+      document.getElementById("submissionForm").style.display = "block";
+      document.getElementById("submissionLocked").style.display = "none";
+      document.getElementById("photoPreview").classList.remove("visible");
+      document.getElementById("photoLabel").textContent = "+ CHOOSE PHOTO";
+      document.getElementById("submissionStatus").textContent = "";
+      document.getElementById("ratingFormArea").innerHTML = "";
+
+      if (testPhotoUrl) {
+        try { URL.revokeObjectURL(testPhotoUrl); } catch (e) {}
+      }
+    }
+
+    initialise();
+
+  </script>
+
+</body>
+</html>
