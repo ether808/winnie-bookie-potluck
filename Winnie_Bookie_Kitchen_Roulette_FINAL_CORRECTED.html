@@ -1,0 +1,2647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Winnie & Bookie | Kitchen Roulette</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+
+:root{
+  --parchment:#F3EBDD;
+  --espresso:#2B211C;
+  --burgundy:#6E2633;
+  --orange:#C65A32;
+  --olive:#68704A;
+  --butter:#D9B96E;
+  --cream:#FAF6ED;
+  --muted:#756A61;
+  --line:#D8CDBD;
+  --white:#FFFDF8;
+  --shadow:0 18px 50px rgba(43,33,28,.12);
+}
+
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 20% 10%,rgba(255,255,255,.4),transparent 28%),
+    radial-gradient(circle at 80% 80%,rgba(198,90,50,.06),transparent 30%),
+    var(--parchment);
+  color:var(--espresso);
+  font-family:"DM Sans",sans-serif;
+  line-height:1.5;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.12;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.24'/%3E%3C/svg%3E");
+  z-index:20;
+}
+
+button,input,textarea{font:inherit}
+
+button{cursor:pointer}
+
+button:disabled{
+  cursor:not-allowed;
+  opacity:.5;
+}
+
+img{
+  max-width:100%;
+  display:block;
+}
+
+a{
+  color:inherit;
+}
+
+.hidden{
+  display:none !important;
+}
+
+.container{
+  width:min(1180px,92%);
+  margin:0 auto;
+}
+
+.narrow{
+  width:min(720px,92%);
+  margin:0 auto;
+}
+
+.eyebrow{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--burgundy);
+}
+
+h1,h2,h3,h4{
+  font-family:"Playfair Display",serif;
+  font-weight:600;
+  margin:0;
+  line-height:1.05;
+}
+
+h1{
+  font-size:clamp(48px,8vw,92px);
+  letter-spacing:-.045em;
+}
+
+h2{
+  font-size:clamp(34px,5vw,58px);
+  letter-spacing:-.035em;
+}
+
+h3{
+  font-size:30px;
+}
+
+p{
+  margin:0 0 14px;
+}
+
+.muted{
+  color:var(--muted);
+}
+
+.small{
+  font-size:13px;
+}
+
+.center{
+  text-align:center;
+}
+
+/* ---------- LOGIN ---------- */
+
+#loginScreen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:30px 0;
+}
+
+.login-shell{
+  width:min(960px,92%);
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  background:var(--cream);
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+  min-height:600px;
+}
+
+.login-image{
+  position:relative;
+  min-height:600px;
+  overflow:hidden;
+}
+
+.login-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.login-image:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(43,33,28,.05),rgba(43,33,28,.5));
+}
+
+.login-caption{
+  position:absolute;
+  left:34px;
+  right:34px;
+  bottom:30px;
+  z-index:2;
+  color:var(--cream);
+}
+
+.login-caption .eyebrow{
+  color:var(--butter);
+  margin-bottom:10px;
+}
+
+.login-caption h2{
+  font-size:42px;
+}
+
+.login-panel{
+  padding:52px 46px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.login-panel .eyebrow{
+  margin-bottom:12px;
+}
+
+.login-panel h1{
+  font-size:48px;
+  margin-bottom:18px;
+}
+
+.login-panel .intro{
+  color:var(--muted);
+  margin-bottom:28px;
+}
+
+.form-group{
+  margin-bottom:18px;
+}
+
+.form-group label{
+  display:block;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  margin-bottom:7px;
+}
+
+.form-group input{
+  width:100%;
+  border:1px solid var(--line);
+  background:var(--white);
+  padding:13px 14px;
+  border-radius:3px;
+  color:var(--espresso);
+  outline:none;
+}
+
+.form-group input:focus{
+  border-color:var(--burgundy);
+  box-shadow:0 0 0 3px rgba(110,38,51,.08);
+}
+
+.btn{
+  border:0;
+  border-radius:2px;
+  padding:13px 20px;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.02em;
+  transition:.2s ease;
+}
+
+.btn:hover:not(:disabled){
+  transform:translateY(-1px);
+}
+
+.btn-primary{
+  background:var(--burgundy);
+  color:var(--cream);
+}
+
+.btn-secondary{
+  background:var(--butter);
+  color:var(--espresso);
+}
+
+.btn-outline{
+  background:transparent;
+  border:1px solid currentColor;
+  color:var(--espresso);
+}
+
+.btn-full{
+  width:100%;
+}
+
+.error-box,
+.success-box{
+  margin-top:14px;
+  padding:11px 13px;
+  font-size:12px;
+  border-radius:2px;
+}
+
+.error-box{
+  background:#F4D9D4;
+  color:#762B22;
+}
+
+.success-box{
+  background:#E3E8D5;
+  color:#4D5832;
+}
+
+/* ---------- APP HEADER ---------- */
+
+#app{
+  padding-bottom:80px;
+}
+
+.site-header{
+  padding:32px 0 24px;
+  border-bottom:1px solid var(--line);
+}
+
+.header-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.brand-mark{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:var(--burgundy);
+  color:var(--cream);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:"Playfair Display",serif;
+  font-size:17px;
+}
+
+.brand-name{
+  font-family:"Playfair Display",serif;
+  font-size:21px;
+}
+
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.player-pill{
+  background:rgba(110,38,51,.08);
+  color:var(--burgundy);
+  padding:8px 12px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+.logout-btn{
+  background:transparent;
+  border:1px solid var(--line);
+  color:var(--muted);
+  padding:8px 12px;
+  font-size:11px;
+}
+
+/* ---------- TEST BANNER ---------- */
+
+.test-banner{
+  margin:20px 0 0;
+  padding:11px 14px;
+  background:var(--butter);
+  color:var(--espresso);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+
+.test-banner button{
+  border:1px solid rgba(43,33,28,.3);
+  background:transparent;
+  padding:5px 9px;
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+}
+
+/* ---------- HERO ---------- */
+
+.hero{
+  padding:74px 0 64px;
+  display:grid;
+  grid-template-columns:1.02fr .98fr;
+  gap:58px;
+  align-items:center;
+}
+
+.hero-copy{
+  max-width:570px;
+}
+
+.hero-copy .eyebrow{
+  margin-bottom:17px;
+}
+
+.hero-copy h1{
+  margin-bottom:23px;
+}
+
+.hero-copy .lead{
+  color:var(--muted);
+  font-size:17px;
+  max-width:500px;
+}
+
+.hero-rule{
+  width:70px;
+  height:3px;
+  background:var(--orange);
+  margin:28px 0;
+}
+
+.hero-meta{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.hero-meta strong{
+  color:var(--espresso);
+}
+
+.hero-image-wrap{
+  position:relative;
+}
+
+.hero-image{
+  width:100%;
+  aspect-ratio:4/5;
+  object-fit:cover;
+}
+
+.hero-stamp{
+  position:absolute;
+  width:108px;
+  height:108px;
+  right:-28px;
+  bottom:-24px;
+  background:var(--burgundy);
+  color:var(--cream);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-family:"Playfair Display",serif;
+  font-size:15px;
+  line-height:1.15;
+  transform:rotate(-8deg);
+  box-shadow:0 10px 25px rgba(43,33,28,.16);
+}
+
+/* ---------- SECTION HEADER ---------- */
+
+.section{
+  padding:70px 0;
+}
+
+.section-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  gap:30px;
+  margin-bottom:28px;
+}
+
+.section-header .eyebrow{
+  margin-bottom:8px;
+}
+
+.section-header p{
+  color:var(--muted);
+  max-width:430px;
+  margin:0;
+  font-size:14px;
+}
+
+/* ---------- ROULETTE ---------- */
+
+.roulette-section{
+  background:var(--espresso);
+  color:var(--cream);
+  padding:70px max(4vw,24px);
+  margin:0 calc((100% - 100vw)/2);
+}
+
+.roulette-inner{
+  width:min(1180px,100%);
+  margin:0 auto;
+}
+
+.roulette-grid{
+  display:grid;
+  grid-template-columns:.82fr 1.18fr;
+  gap:54px;
+  align-items:center;
+}
+
+.roulette-copy .eyebrow{
+  color:var(--butter);
+  margin-bottom:12px;
+}
+
+.roulette-copy h2{
+  margin-bottom:17px;
+}
+
+.roulette-copy .description{
+  color:rgba(250,246,237,.7);
+  max-width:430px;
+  font-size:14px;
+}
+
+.spinner-card{
+  background:#362923;
+  border:1px solid rgba(250,246,237,.13);
+  padding:30px;
+}
+
+.spinner-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.week-tag{
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.15em;
+  color:var(--butter);
+  font-weight:700;
+}
+
+.spinner-for{
+  font-size:11px;
+  color:rgba(250,246,237,.55);
+}
+
+.roulette-photo{
+  width:100%;
+  aspect-ratio:16/8.5;
+  object-fit:cover;
+  margin-bottom:25px;
+}
+
+.spinner-stage{
+  text-align:center;
+}
+
+.spinner-disc{
+  width:118px;
+  height:118px;
+  border:1px solid rgba(250,246,237,.35);
+  border-radius:50%;
+  margin:0 auto 22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:"Playfair Display",serif;
+  font-size:38px;
+  color:var(--butter);
+  background:
+    radial-gradient(circle at center,rgba(250,246,237,.08) 0 33%,transparent 34%),
+    conic-gradient(
+      rgba(250,246,237,.08) 0 12.5%,
+      transparent 12.5% 25%,
+      rgba(250,246,237,.08) 25% 37.5%,
+      transparent 37.5% 50%,
+      rgba(250,246,237,.08) 50% 62.5%,
+      transparent 62.5% 75%,
+      rgba(250,246,237,.08) 75% 87.5%,
+      transparent 87.5% 100%
+    );
+}
+
+.spinner-disc.spinning{
+  animation:spinDisc .9s ease-in-out;
+}
+
+@keyframes spinDisc{
+  0%{transform:rotate(0deg)}
+  100%{transform:rotate(720deg)}
+}
+
+.spin-instruction{
+  color:rgba(250,246,237,.62);
+  font-size:12px;
+  margin-bottom:15px;
+}
+
+.ingredient-result{
+  font-family:"Playfair Display",serif;
+  font-size:clamp(38px,5vw,62px);
+  color:var(--butter);
+  line-height:1;
+  margin:10px 0 18px;
+}
+
+.spin-status{
+  min-height:18px;
+  color:rgba(250,246,237,.62);
+  font-size:12px;
+  margin-top:13px;
+}
+
+/* ---------- COOK SECTION ---------- */
+
+.cook-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+  align-items:start;
+}
+
+.cook-image{
+  width:100%;
+  aspect-ratio:4/3;
+  object-fit:cover;
+}
+
+.cook-form{
+  background:var(--cream);
+  border:1px solid var(--line);
+  padding:30px;
+}
+
+.cook-form .eyebrow{
+  margin-bottom:8px;
+}
+
+.cook-form h2{
+  margin-bottom:12px;
+}
+
+.form-note{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:22px;
+}
+
+.cook-form label{
+  display:block;
+  margin:16px 0 7px;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.13em;
+  font-weight:700;
+}
+
+.cook-form input[type="text"],
+.cook-form textarea{
+  width:100%;
+  border:1px solid var(--line);
+  background:var(--white);
+  padding:12px 13px;
+  border-radius:2px;
+  outline:none;
+  color:var(--espresso);
+}
+
+.cook-form textarea{
+  min-height:105px;
+  resize:vertical;
+}
+
+.cook-form input:focus,
+.cook-form textarea:focus{
+  border-color:var(--burgundy);
+}
+
+.file-input{
+  width:100%;
+  padding:11px 0;
+  font-size:12px;
+}
+
+.photo-preview{
+  width:100%;
+  max-height:380px;
+  object-fit:cover;
+  margin-top:12px;
+}
+
+/* ---------- REVEAL ---------- */
+
+.reveal-section{
+  background:var(--cream);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:70px 0;
+}
+
+.reveal-header{
+  text-align:center;
+  margin-bottom:32px;
+}
+
+.reveal-header .eyebrow{
+  margin-bottom:9px;
+}
+
+.reveal-header p{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.reveal-photo{
+  width:100%;
+  aspect-ratio:4/3;
+  object-fit:cover;
+}
+
+.submission-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:28px;
+}
+
+.submission-card{
+  background:var(--white);
+  border:1px solid var(--line);
+  padding:18px;
+}
+
+.submission-card .player{
+  margin-top:15px;
+  color:var(--burgundy);
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.15em;
+}
+
+.submission-card h3{
+  font-size:28px;
+  margin:5px 0 8px;
+}
+
+.submission-card p{
+  color:var(--muted);
+  font-size:13px;
+  margin:0;
+}
+
+/* ---------- RATING ---------- */
+
+.rating-section{
+  padding:70px 0;
+}
+
+.rating-shell{
+  width:min(760px,100%);
+  margin:0 auto;
+}
+
+.rating-header{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.rating-header .eyebrow{
+  margin-bottom:9px;
+}
+
+.rating-header p{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.rating-card{
+  background:var(--cream);
+  border:1px solid var(--line);
+  padding:30px;
+}
+
+.rating-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:20px;
+  align-items:center;
+  padding:15px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.rating-row:last-child{
+  border-bottom:0;
+}
+
+.rating-label{
+  font-size:13px;
+  font-weight:600;
+}
+
+.rating-buttons{
+  display:flex;
+  gap:6px;
+}
+
+.rating-btn{
+  width:34px;
+  height:34px;
+  border:1px solid var(--line);
+  background:transparent;
+  color:var(--espresso);
+  border-radius:50%;
+  font-size:11px;
+  font-weight:700;
+  padding:0;
+}
+
+.rating-btn.selected{
+  background:var(--burgundy);
+  color:var(--cream);
+  border-color:var(--burgundy);
+}
+
+.rating-total{
+  margin:24px 0 5px;
+  text-align:center;
+  font-family:"Playfair Display",serif;
+  font-size:44px;
+  color:var(--burgundy);
+}
+
+.rating-total-label{
+  text-align:center;
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+}
+
+/* ---------- RESULTS ---------- */
+
+.results-section{
+  background:var(--espresso);
+  color:var(--cream);
+  padding:70px max(4vw,24px);
+  margin:0 calc((100% - 100vw)/2);
+}
+
+.results-inner{
+  width:min(900px,100%);
+  margin:0 auto;
+}
+
+.results-header{
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.results-header .eyebrow{
+  color:var(--butter);
+  margin-bottom:9px;
+}
+
+.results-header p{
+  color:rgba(250,246,237,.62);
+  font-size:13px;
+}
+
+.results-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+.result-card{
+  background:#362923;
+  border:1px solid rgba(250,246,237,.12);
+  padding:30px;
+  text-align:center;
+}
+
+.result-player{
+  color:var(--butter);
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  font-size:10px;
+  font-weight:700;
+}
+
+.result-score{
+  font-family:"Playfair Display",serif;
+  font-size:64px;
+  line-height:1;
+  margin:12px 0 5px;
+}
+
+.result-max{
+  color:rgba(250,246,237,.5);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+
+.winner-note{
+  text-align:center;
+  margin-top:26px;
+  font-family:"Playfair Display",serif;
+  font-size:25px;
+  color:var(--butter);
+}
+
+/* ---------- FOOTER ---------- */
+
+.site-footer{
+  padding:40px 0 70px;
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+  letter-spacing:.05em;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media(max-width:820px){
+  .login-shell{
+    grid-template-columns:1fr;
+  }
+
+  .login-image{
+    min-height:330px;
+  }
+
+  .login-panel{
+    padding:38px 28px;
+  }
+
+  .hero{
+    grid-template-columns:1fr;
+    gap:35px;
+    padding-top:48px;
+  }
+
+  .hero-image-wrap{
+    max-width:600px;
+    margin:0 auto;
+  }
+
+  .roulette-grid,
+  .cook-grid{
+    grid-template-columns:1fr;
+  }
+
+  .roulette-grid{
+    gap:35px;
+  }
+
+  .cook-image{
+    max-height:480px;
+  }
+}
+
+@media(max-width:600px){
+  .site-header{
+    padding-top:22px;
+  }
+
+  .header-row{
+    align-items:flex-start;
+  }
+
+  .brand-name{
+    font-size:18px;
+  }
+
+  .header-actions{
+    flex-direction:column;
+    align-items:flex-end;
+  }
+
+  .hero{
+    padding:44px 0 50px;
+  }
+
+  .hero-stamp{
+    width:88px;
+    height:88px;
+    right:-8px;
+    bottom:-15px;
+    font-size:12px;
+  }
+
+  .section{
+    padding:52px 0;
+  }
+
+  .section-header{
+    display:block;
+  }
+
+  .section-header p{
+    margin-top:12px;
+  }
+
+  .roulette-section,
+  .results-section{
+    padding-top:52px;
+    padding-bottom:52px;
+  }
+
+  .spinner-card{
+    padding:20px;
+  }
+
+  .submission-grid,
+  .results-grid{
+    grid-template-columns:1fr;
+  }
+
+  .rating-row{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .test-banner{
+    flex-direction:column;
+    text-align:center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="loginScreen">
+  <div class="login-shell">
+
+    <div class="login-image">
+      <img
+        src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=85"
+        alt="A beautifully prepared table"
+      >
+
+      <div class="login-caption">
+        <div class="eyebrow">A weekly cooking game</div>
+        <h2>Two kitchens.<br>One ingredient.</h2>
+      </div>
+    </div>
+
+    <div class="login-panel">
+      <div class="eyebrow">Winnie & Bookie</div>
+      <h1>Kitchen Roulette</h1>
+
+      <p class="intro">
+        Two kitchens. One ingredient. Zero excuses.
+      </p>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <button
+          id="loginButton"
+          class="btn btn-primary btn-full"
+          type="submit"
+        >
+          Enter the kitchen
+        </button>
+
+        <div id="loginError" class="error-box hidden"></div>
+
+      </form>
+    </div>
+
+  </div>
+</div>
+
+
+<div id="app" class="hidden">
+
+  <header class="site-header">
+    <div class="container">
+
+      <div class="header-row">
+
+        <div class="brand">
+          <div class="brand-mark">W&B</div>
+          <div class="brand-name">Kitchen Roulette</div>
+        </div>
+
+        <div class="header-actions">
+          <div id="playerPill" class="player-pill"></div>
+
+          <button
+            id="logoutButton"
+            class="logout-btn"
+            type="button"
+          >
+            Log out
+          </button>
+        </div>
+
+      </div>
+
+      <div id="testBanner" class="test-banner">
+        <span>TEST KITCHEN · rehearsal mode</span>
+
+        <button
+          id="resetTestButton"
+          type="button"
+        >
+          Reset test
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+
+  <main>
+
+    <!-- HERO -->
+
+    <section class="container hero">
+
+      <div class="hero-copy">
+
+        <div class="eyebrow">
+          The weekly ritual
+        </div>
+
+        <h1>
+          Cook something<br>
+          worth talking about.
+        </h1>
+
+        <div class="hero-rule"></div>
+
+        <p class="lead">
+          Every week, one of you chooses the ingredient.
+          Both of you cook. Then you find out what happened
+          in the other kitchen.
+        </p>
+
+        <div class="hero-meta">
+          <span>
+            <strong>01</strong> · Spin
+          </span>
+
+          <span>
+            <strong>02</strong> · Cook
+          </span>
+
+          <span>
+            <strong>03</strong> · Reveal
+          </span>
+        </div>
+
+      </div>
+
+      <div class="hero-image-wrap">
+
+        <img
+          class="hero-image"
+          src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1200&q=85"
+          alt="Cooking together in a warm kitchen"
+        >
+
+        <div class="hero-stamp">
+          WEEKLY<br>
+          RITUAL
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ROULETTE -->
+
+    <section
+      id="rouletteSection"
+      class="roulette-section"
+    >
+
+      <div class="roulette-inner">
+
+        <div class="roulette-grid">
+
+          <div class="roulette-copy">
+
+            <div class="eyebrow">
+              This week's challenge
+            </div>
+
+            <h2>
+              One ingredient.<br>
+              Make it yours.
+            </h2>
+
+            <p class="description">
+              The spinner chooses the ingredient. The cook
+              decides what happens next.
+            </p>
+
+          </div>
+
+
+          <div class="spinner-card">
+
+            <div class="spinner-top">
+
+              <div
+                id="weekTag"
+                class="week-tag"
+              >
+                Week 1
+              </div>
+
+              <div
+                id="spinnerFor"
+                class="spinner-for"
+              >
+                Spinner: —
+              </div>
+
+            </div>
+
+
+            <img
+              id="roulettePhoto"
+              class="roulette-photo"
+              src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=1400&q=85"
+              alt="Fresh food ingredients"
+            >
+
+
+            <div class="spinner-stage">
+
+              <div
+                id="spinnerDisc"
+                class="spinner-disc"
+              >
+                ?
+              </div>
+
+              <div
+                id="spinInstruction"
+                class="spin-instruction"
+              >
+                Waiting for this week's spinner.
+              </div>
+
+              <div
+                id="ingredientResult"
+                class="ingredient-result hidden"
+              ></div>
+
+              <button
+                id="spinButton"
+                class="btn btn-secondary"
+                type="button"
+              >
+                Spin the kitchen
+              </button>
+
+              <div
+                id="spinStatus"
+                class="spin-status"
+              ></div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- COOK -->
+
+    <section
+      id="cookSection"
+      class="container section hidden"
+    >
+
+      <div class="section-header">
+
+        <div>
+          <div class="eyebrow">
+            Your turn
+          </div>
+
+          <h2>Cook & submit.</h2>
+        </div>
+
+        <p>
+          There is only one rule: use the ingredient.
+          Everything else is up to you.
+        </p>
+
+      </div>
+
+
+      <div class="cook-grid">
+
+        <div>
+          <img
+            class="cook-image"
+            src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=85"
+            alt="Cooking ingredients in a kitchen"
+          >
+        </div>
+
+
+        <div class="cook-form">
+
+          <div class="eyebrow">
+            The challenge
+          </div>
+
+          <h2 id="challengeIngredient">
+            —
+          </h2>
+
+          <p class="form-note">
+            Give your dish a name, tell the other person
+            what you made, and prove it with a photo.
+          </p>
+
+
+          <form id="submissionForm">
+
+            <label for="dishName">
+              Dish name
+            </label>
+
+            <input
+              id="dishName"
+              type="text"
+              placeholder="e.g. Charred tomato gnocchi"
+              required
+            >
+
+
+            <label for="dishDescription">
+              Tell us about it
+            </label>
+
+            <textarea
+              id="dishDescription"
+              placeholder="What did you make? Any interesting choices?"
+            ></textarea>
+
+
+            <label for="dishPhoto">
+              Photo
+            </label>
+
+            <input
+              id="dishPhoto"
+              class="file-input"
+              type="file"
+              accept="image/*"
+              required
+            >
+
+
+            <img
+              id="photoPreview"
+              class="photo-preview hidden"
+              alt="Dish preview"
+            >
+
+
+            <button
+              id="submitDishButton"
+              class="btn btn-primary btn-full"
+              type="submit"
+            >
+              Submit my dish
+            </button>
+
+
+            <div
+              id="submissionStatus"
+              class="hidden"
+            ></div>
+
+          </form>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- REVEAL -->
+
+    <section
+      id="revealSection"
+      class="reveal-section hidden"
+    >
+
+      <div class="container">
+
+        <div class="reveal-header">
+
+          <div class="eyebrow">
+            The reveal
+          </div>
+
+          <h2>So... what did you both make?</h2>
+
+          <p>
+            No peeking. No editing. Just the two dishes.
+          </p>
+
+        </div>
+
+
+        <div
+          id="revealGrid"
+          class="submission-grid"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- RATING -->
+
+    <section
+      id="ratingSection"
+      class="container rating-section hidden"
+    >
+
+      <div class="rating-shell">
+
+        <div class="rating-header">
+
+          <div class="eyebrow">
+            Kitchen jury
+          </div>
+
+          <h2>Rate the other dish.</h2>
+
+          <p id="ratingIntro">
+            Taste matters. Creativity matters. Presentation
+            definitely matters.
+          </p>
+
+        </div>
+
+
+        <div class="rating-card">
+
+          <div id="ratingRows"></div>
+
+
+          <div
+            id="ratingTotal"
+            class="rating-total"
+          >
+            —
+          </div>
+
+          <div class="rating-total-label">
+            Total · out of 20
+          </div>
+
+
+          <button
+            id="submitRatingButton"
+            class="btn btn-primary btn-full"
+            type="button"
+          >
+            Submit rating
+          </button>
+
+
+          <div
+            id="ratingStatus"
+            class="hidden"
+          ></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- RESULTS -->
+
+    <section
+      id="resultsSection"
+      class="results-section hidden"
+    >
+
+      <div class="results-inner">
+
+        <div class="results-header">
+
+          <div class="eyebrow">
+            The verdict
+          </div>
+
+          <h2>Kitchen results.</h2>
+
+          <p>
+            The numbers have spoken.
+          </p>
+
+        </div>
+
+
+        <div
+          id="resultsGrid"
+          class="results-grid"
+        ></div>
+
+
+        <div
+          id="winnerNote"
+          class="winner-note"
+        ></div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer class="site-footer">
+    <div class="container">
+      Winnie & Bookie · Kitchen Roulette
+    </div>
+  </footer>
+
+</div>
+
+
+
+<script>
+"use strict";
+
+/* =========================================================
+   WINNIE & BOOKIE — KITCHEN ROULETTE
+   Single coherent client-side implementation.
+   Test mode is browser-only before 4 Oct 2026.
+========================================================= */
+
+const SUPABASE_URL = "https://mywlgfewdsitobzzbxbj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_t0jIfQXkVWW5sQRWVmGUlQ_JeuYAExW";
+const START_DATE = new Date("2026-10-04T00:00:00");
+const TEST_MODE = new Date() < START_DATE;
+
+let accessToken = localStorage.getItem("potluck_access_token") || "";
+let refreshToken = localStorage.getItem("potluck_refresh_token") || "";
+let currentPlayer = null;
+let currentWeek = 1;
+let currentIngredient = null;
+let currentSubmissions = [];
+let currentRatings = [];
+let testChallenge = null;
+let testSubmission = null;
+let testPhotoUrl = null;
+let selectedRatings = {
+  taste: null,
+  creativity: null,
+  ingredient_use: null,
+  presentation: null
+};
+
+const INGREDIENTS = [
+  "Eggplant","Mushrooms","Sweet potato","Tomatoes","Chickpeas",
+  "Courgette","Avocado","Cauliflower","Spinach","Corn","Carrots",
+  "Pumpkin","Lentils","Cabbage","Bananas","Pineapple","Mango",
+  "Beans","Peppers","Potatoes"
+];
+
+const $ = (id) => document.getElementById(id);
+
+function show(el) {
+  if (el) el.classList.remove("hidden");
+}
+
+function hide(el) {
+  if (el) el.classList.add("hidden");
+}
+
+function setText(el, value) {
+  if (el) el.textContent = value;
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function formatDate(date) {
+  return date.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+}
+
+function getWeekNumber() {
+  const today = new Date();
+  const start = new Date(
+    START_DATE.getFullYear(),
+    START_DATE.getMonth(),
+    START_DATE.getDate()
+  );
+  const day = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+  const diff = day.getTime() - start.getTime();
+
+  if (diff < 0) return 1;
+  return Math.floor(diff / (1000 * 60 * 60 * 24 * 7)) + 1;
+}
+
+function getWeekStartDate(weekNumber) {
+  const date = new Date(START_DATE);
+  date.setDate(date.getDate() + ((weekNumber - 1) * 7));
+  return date;
+}
+
+/* Week 1 = Bookie, Week 2 = Winnie, etc. */
+function getSpinnerForWeek(weekNumber) {
+  return weekNumber % 2 === 1 ? "Bookie" : "Winnie";
+}
+
+function randomIngredient() {
+  return INGREDIENTS[Math.floor(Math.random() * INGREDIENTS.length)];
+}
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+async function authFetch(path, options = {}) {
+  const headers = {
+    apikey: SUPABASE_KEY,
+    ...(options.headers || {})
+  };
+
+  if (options.body && !headers["Content-Type"]) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  return fetch(`${SUPABASE_URL}/auth/v1/${path}`, {
+    ...options,
+    headers
+  });
+}
+
+async function supabaseFetch(path, options = {}) {
+  const headers = {
+    apikey: SUPABASE_KEY,
+    ...(options.headers || {})
+  };
+
+  if (accessToken) {
+    headers.Authorization = `Bearer ${accessToken}`;
+  }
+
+  if (options.body && !headers["Content-Type"]) {
+    headers["Content-Type"] = "application/json";
+  }
+
+  const response = await fetch(`${SUPABASE_URL}${path}`, {
+    ...options,
+    headers
+  });
+
+  if (!response.ok) {
+    let message = `Request failed (${response.status})`;
+    try {
+      const body = await response.json();
+      message =
+        body?.message ||
+        body?.error_description ||
+        body?.error ||
+        body?.details ||
+        message;
+    } catch (_) {}
+    throw new Error(message);
+  }
+
+  if (response.status === 204) return null;
+
+  const text = await response.text();
+  if (!text) return null;
+
+  try {
+    return JSON.parse(text);
+  } catch (_) {
+    return text;
+  }
+}
+
+async function login(email, password) {
+  const response = await authFetch("token?grant_type=password", {
+    method: "POST",
+    body: JSON.stringify({ email, password })
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      data?.error_description ||
+      data?.msg ||
+      data?.message ||
+      "Login failed."
+    );
+  }
+
+  accessToken = data.access_token || "";
+  refreshToken = data.refresh_token || "";
+
+  localStorage.setItem("potluck_access_token", accessToken);
+  localStorage.setItem("potluck_refresh_token", refreshToken);
+
+  return data;
+}
+
+async function refreshSession() {
+  if (!refreshToken) return false;
+
+  try {
+    const response = await authFetch("token?grant_type=refresh_token", {
+      method: "POST",
+      body: JSON.stringify({ refresh_token: refreshToken })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) throw new Error("Session refresh failed.");
+
+    accessToken = data.access_token || "";
+    refreshToken = data.refresh_token || refreshToken;
+
+    localStorage.setItem("potluck_access_token", accessToken);
+    localStorage.setItem("potluck_refresh_token", refreshToken);
+
+    return true;
+  } catch (_) {
+    logout(false);
+    return false;
+  }
+}
+
+async function hasValidSession() {
+  if (!accessToken) return false;
+
+  try {
+    const response = await authFetch("user", {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+
+    if (response.ok) return true;
+
+    if (response.status === 401) {
+      return refreshSession();
+    }
+
+    return false;
+  } catch (_) {
+    return false;
+  }
+}
+
+function logout(reload = true) {
+  accessToken = "";
+  refreshToken = "";
+  currentPlayer = null;
+
+  localStorage.removeItem("potluck_access_token");
+  localStorage.removeItem("potluck_refresh_token");
+
+  if (testPhotoUrl) {
+    URL.revokeObjectURL(testPhotoUrl);
+    testPhotoUrl = null;
+  }
+
+  if (reload) window.location.reload();
+}
+
+/* =========================================================
+   PLAYER IDENTITY
+========================================================= */
+
+async function loadPlayerIdentity() {
+  const data = await supabaseFetch(
+    "/rest/v1/potluck_players?select=player"
+  );
+
+  if (!Array.isArray(data) || !data.length) {
+    throw new Error(
+      "This Supabase account is not linked to a Kitchen Roulette player."
+    );
+  }
+
+  currentPlayer = data[0].player;
+  setText($("playerPill"), `Playing as ${currentPlayer}`);
+}
+
+/* =========================================================
+   LOGIN / APP VISIBILITY
+========================================================= */
+
+function enterApp() {
+  hide($("loginScreen"));
+  show($("app"));
+}
+
+function showLogin() {
+  show($("loginScreen"));
+  hide($("app"));
+}
+
+async function completeLogin() {
+  try {
+    await loadPlayerIdentity();
+    enterApp();
+    initialiseApp();
+  } catch (error) {
+    $("loginError").textContent = error.message;
+    $("loginError").classList.remove("hidden");
+    logout(false);
+    showLogin();
+  }
+}
+
+/* =========================================================
+   TEST KITCHEN
+========================================================= */
+
+function resetTestKitchen() {
+  if (testPhotoUrl) {
+    URL.revokeObjectURL(testPhotoUrl);
+  }
+
+  testChallenge = null;
+  testSubmission = null;
+  testPhotoUrl = null;
+  currentIngredient = null;
+  currentSubmissions = [];
+  currentRatings = [];
+  selectedRatings = {
+    taste: null,
+    creativity: null,
+    ingredient_use: null,
+    presentation: null
+  };
+
+  hide($("cookSection"));
+  hide($("revealSection"));
+  hide($("ratingSection"));
+  hide($("resultsSection"));
+  hide($("ingredientResult"));
+
+  setText($("spinnerDisc"), "?");
+  setText($("spinInstruction"), `Test mode · ${getSpinnerForWeek(currentWeek)} spins this week.`);
+  setText($("spinStatus"), "This rehearsal does not touch the real game.");
+  $("spinButton").disabled = false;
+  $("spinButton").textContent = "Spin the kitchen";
+
+  $("submissionForm").reset();
+  $("photoPreview").src = "";
+  $("photoPreview").classList.add("hidden");
+  $("submissionStatus").classList.add("hidden");
+}
+
+async function spinTest() {
+  if (testChallenge) return;
+
+  $("spinButton").disabled = true;
+  $("spinnerDisc").classList.add("spinning");
+  setText($("spinnerDisc"), "…");
+  setText($("spinStatus"), "The test kitchen is deciding...");
+
+  const interval = setInterval(() => {
+    setText($("ingredientResult"), randomIngredient());
+    show($("ingredientResult"));
+  }, 80);
+
+  await new Promise(resolve => setTimeout(resolve, 900));
+  clearInterval(interval);
+
+  currentIngredient = randomIngredient();
+
+  testChallenge = {
+    week_number: currentWeek,
+    start_date: getWeekStartDate(currentWeek).toISOString().slice(0, 10),
+    ingredient: currentIngredient,
+    spun_by: getSpinnerForWeek(currentWeek),
+    spun_at: new Date().toISOString()
+  };
+
+  $("spinnerDisc").classList.remove("spinning");
+  setText($("spinnerDisc"), "✓");
+  setText($("ingredientResult"), currentIngredient);
+  show($("ingredientResult"));
+  setText($("challengeIngredient"), currentIngredient);
+  setText($("spinInstruction"), `TEST · ${testChallenge.spun_by} spun the kitchen.`);
+  setText($("spinStatus"), `Test ingredient: ${currentIngredient}`);
+  show($("cookSection"));
+  $("cookSection").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+/* =========================================================
+   PRODUCTION ROULETTE
+========================================================= */
+
+async function loadCurrentWeek() {
+  currentWeek = getWeekNumber();
+
+  setText($("weekTag"), `Week ${currentWeek}`);
+  setText($("spinnerFor"), `Spinner: ${getSpinnerForWeek(currentWeek)}`);
+
+  hide($("cookSection"));
+  hide($("revealSection"));
+  hide($("ratingSection"));
+  hide($("resultsSection"));
+  hide($("ingredientResult"));
+
+  if (TEST_MODE) {
+    $("testBanner").style.display = "flex";
+    setText(
+      $("spinInstruction"),
+      `Test mode · ${getSpinnerForWeek(currentWeek)} spins this week.`
+    );
+    setText(
+      $("spinStatus"),
+      "This rehearsal does not touch the real game."
+    );
+    $("spinButton").disabled = false;
+    return;
+  }
+
+  $("testBanner").style.display = "none";
+
+  const existing = await supabaseFetch(
+    `/rest/v1/potluck_weeks?week_number=eq.${currentWeek}&select=*`
+  );
+
+  if (Array.isArray(existing) && existing.length) {
+    renderExistingChallenge(existing[0]);
+    await loadSubmissionState();
+    return;
+  }
+
+  const spinner = getSpinnerForWeek(currentWeek);
+  const startDate = getWeekStartDate(currentWeek);
+
+  setText(
+    $("spinInstruction"),
+    `${spinner} is this week's spinner.`
+  );
+
+  if (currentPlayer !== spinner) {
+    $("spinButton").disabled = true;
+    setText($("spinStatus"), `Waiting for ${spinner} to spin.`);
+  } else if (new Date() < startDate) {
+    $("spinButton").disabled = true;
+    setText(
+      $("spinStatus"),
+      `Week ${currentWeek} begins ${formatDate(startDate)}.`
+    );
+  } else {
+    $("spinButton").disabled = false;
+    setText($("spinStatus"), "You're up. Spin the kitchen.");
+  }
+}
+
+function renderExistingChallenge(week) {
+  currentIngredient = week.ingredient;
+
+  setText($("weekTag"), `Week ${week.week_number}`);
+  setText($("spinnerFor"), `Spinner: ${week.spun_by}`);
+  setText($("spinnerDisc"), "✓");
+  setText($("ingredientResult"), currentIngredient);
+  show($("ingredientResult"));
+  setText($("spinInstruction"), `${week.spun_by} spun the kitchen.`);
+  setText($("spinStatus"), `Ingredient: ${currentIngredient}`);
+  $("spinButton").disabled = true;
+  setText($("challengeIngredient"), currentIngredient);
+  show($("cookSection"));
+}
+
+async function spinReal() {
+  const spinner = getSpinnerForWeek(currentWeek);
+
+  if (currentPlayer !== spinner || new Date() < getWeekStartDate(currentWeek)) {
+    return;
+  }
+
+  $("spinButton").disabled = true;
+  $("spinnerDisc").classList.add("spinning");
+  setText($("spinnerDisc"), "…");
+  setText($("spinStatus"), "The kitchen is deciding...");
+
+  await new Promise(resolve => setTimeout(resolve, 900));
+
+  const ingredient = randomIngredient();
+
+  try {
+    const result = await supabaseFetch("/rest/v1/potluck_weeks", {
+      method: "POST",
+      headers: { Prefer: "return=representation" },
+      body: JSON.stringify({
+        week_number: currentWeek,
+        start_date: getWeekStartDate(currentWeek).toISOString().slice(0, 10),
+        ingredient,
+        spun_by: currentPlayer,
+        spun_at: new Date().toISOString()
+      })
+    });
+
+    const week = Array.isArray(result) ? result[0] : result;
+    currentIngredient = week?.ingredient || ingredient;
+
+    $("spinnerDisc").classList.remove("spinning");
+    setText($("spinnerDisc"), "✓");
+    setText($("ingredientResult"), currentIngredient);
+    show($("ingredientResult"));
+    setText($("challengeIngredient"), currentIngredient);
+    setText($("spinStatus"), `Tonight's ingredient is ${currentIngredient}.`);
+    setText($("spinInstruction"), `${currentPlayer} spun the kitchen.`);
+    show($("cookSection"));
+    await loadSubmissionState();
+  } catch (error) {
+    $("spinnerDisc").classList.remove("spinning");
+    setText($("spinnerDisc"), "?");
+    $("spinButton").disabled = false;
+    setText($("spinStatus"), error.message);
+  }
+}
+
+/* =========================================================
+   SUBMISSIONS
+========================================================= */
+
+async function loadSubmissionState() {
+  if (!currentPlayer || !currentIngredient) return;
+
+  if (TEST_MODE) {
+    if (testSubmission) showLockedSubmission(testSubmission);
+    return;
+  }
+
+  const rows = await supabaseFetch(
+    `/rest/v1/potluck_submissions?week_number=eq.${currentWeek}&player=eq.${encodeURIComponent(currentPlayer)}&select=*`
+  );
+
+  if (Array.isArray(rows) && rows.length) {
+    showLockedSubmission(rows[0]);
+  }
+}
+
+function previewPhoto(event) {
+  const file = event.target.files?.[0];
+  const preview = $("photoPreview");
+  const status = $("submissionStatus");
+
+  if (!file) return;
+
+  if (file.size > 8 * 1024 * 1024) {
+    event.target.value = "";
+    preview.src = "";
+    preview.classList.add("hidden");
+    status.textContent = "That photo is over 8 MB. Please choose a smaller one.";
+    status.classList.remove("hidden");
+    return;
+  }
+
+  if (!file.type.startsWith("image/")) {
+    event.target.value = "";
+    preview.src = "";
+    preview.classList.add("hidden");
+    status.textContent = "Please choose an image.";
+    status.classList.remove("hidden");
+    return;
+  }
+
+  preview.src = URL.createObjectURL(file);
+  preview.classList.remove("hidden");
+  status.classList.add("hidden");
+}
+
+function safeFileName(name) {
+  return name.toLowerCase()
+    .replace(/[^a-z0-9._-]+/g, "-")
+    .replace(/-+/g, "-");
+}
+
+async function uploadPhoto(file) {
+  const extension = (file.name.split(".").pop() || "jpg").toLowerCase();
+  const path =
+    `week/${currentWeek}/${currentPlayer}/${Date.now()}-${safeFileName(file.name.replace(/\.[^/.]+$/, ""))}.${extension}`;
+
+  const response = await fetch(
+    `${SUPABASE_URL}/storage/v1/object/potluck-photos/${path}`,
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": file.type,
+        "x-upsert": "false"
+      },
+      body: file
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Photo upload failed (${response.status}).`);
+  }
+
+  return path;
+}
+
+async function createSignedPhotoUrl(path) {
+  if (!path) return null;
+
+  const response = await fetch(
+    `${SUPABASE_URL}/storage/v1/object/sign/potluck-photos/${path}`,
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ expiresIn: 3600 })
+    }
+  );
+
+  if (!response.ok) return null;
+
+  const data = await response.json();
+  return data?.signedURL
+    ? `${SUPABASE_URL}/storage/v1${data.signedURL}`
+    : null;
+}
+
+async function submitDish(event) {
+  event.preventDefault();
+
+  const dishName = $("dishName").value.trim();
+  const description = $("dishDescription").value.trim();
+  const file = $("dishPhoto").files?.[0];
+  const button = $("submitDishButton");
+  const status = $("submissionStatus");
+
+  if (!dishName) {
+    status.textContent = "Give your dish a name first.";
+    status.classList.remove("hidden");
+    return;
+  }
+
+  if (!file) {
+    status.textContent = "Please choose a photo.";
+    status.classList.remove("hidden");
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "LOCKING IT IN...";
+
+  try {
+    if (TEST_MODE) {
+      if (testPhotoUrl) URL.revokeObjectURL(testPhotoUrl);
+      testPhotoUrl = URL.createObjectURL(file);
+
+      testSubmission = {
+        id: "TEST-SUBMISSION",
+        week_number: currentWeek,
+        player: currentPlayer,
+        dish_name: dishName,
+        description,
+        photo_url: testPhotoUrl,
+        submitted_at: new Date().toISOString()
+      };
+
+      showLockedSubmission(testSubmission);
+      await openReveal();
+      return;
+    }
+
+    const photoPath = await uploadPhoto(file);
+
+    const result = await supabaseFetch("/rest/v1/potluck_submissions", {
+      method: "POST",
+      headers: { Prefer: "return=representation" },
+      body: JSON.stringify({
+        week_number: currentWeek,
+        player: currentPlayer,
+        dish_name: dishName,
+        description,
+        photo_url: photoPath,
+        submitted_at: new Date().toISOString()
+      })
+    });
+
+    showLockedSubmission(Array.isArray(result) ? result[0] : result);
+  } catch (error) {
+    status.textContent = error.message;
+    status.classList.remove("hidden");
+    button.disabled = false;
+    button.textContent = "Submit my dish";
+  }
+}
+
+function showLockedSubmission(submission) {
+  const form = $("submissionForm");
+  const status = $("submissionStatus");
+
+  form.querySelectorAll("input, textarea, button").forEach(el => {
+    el.disabled = true;
+  });
+
+  status.textContent =
+    `Dish locked in: ${submission.dish_name}. Your submission stays private until the reveal.`;
+  status.classList.remove("hidden");
+}
+
+/* =========================================================
+   REVEAL
+========================================================= */
+
+function getRevealDate() {
+  const date = getWeekStartDate(currentWeek);
+  date.setDate(date.getDate() + 7);
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
+
+async function openReveal() {
+  show($("revealSection"));
+
+  if (TEST_MODE) {
+    await buildTestReveal();
+    return;
+  }
+
+  if (new Date() < getRevealDate()) {
+    setText(
+      $("revealStatus"),
+      `The reveal opens ${formatDate(getRevealDate())}.`
+    );
+    return;
+  }
+
+  await loadRealReveal();
+}
+
+async function buildTestReveal() {
+  if (!testSubmission) return;
+
+  const otherPlayer = currentPlayer === "Winnie" ? "Bookie" : "Winnie";
+
+  currentSubmissions = [
+    testSubmission,
+    {
+      id: "TEST-OTHER",
+      week_number: currentWeek,
+      player: otherPlayer,
+      dish_name: `${otherPlayer}'s Test Dish`,
+      description: "A deliberately fake dish for rehearsal only. This never enters Supabase.",
+      photo_url: null
+    }
+  ];
+
+  renderReveal();
+
+  setText(
+    $("revealHeaderText"),
+    "TEST REVEAL · Your rehearsal is open."
+  );
+
+  show($("ratingSection"));
+  renderRating();
+  renderTestResults();
+}
+
+async function loadRealReveal() {
+  const rows = await supabaseFetch(
+    `/rest/v1/potluck_submissions?week_number=eq.${currentWeek}&select=*`
+  );
+
+  currentSubmissions = Array.isArray(rows) ? rows : [];
+  renderReveal();
+
+  const ratings = await supabaseFetch(
+    `/rest/v1/potluck_ratings?week_number=eq.${currentWeek}&select=*`
+  );
+
+  currentRatings = Array.isArray(ratings) ? ratings : [];
+  renderRating();
+  renderRealResults();
+}
+
+function renderReveal() {
+  const grid = $("revealGrid");
+  if (!grid) return;
+
+  if (!currentSubmissions.length) {
+    grid.innerHTML = "<p class='muted'>No dishes have been submitted.</p>";
+    return;
+  }
+
+  grid.innerHTML = currentSubmissions.map(submission => `
+    <article class="submission-card">
+      <div class="reveal-photo-wrap">
+        <div class="reveal-photo" data-photo="${escapeHtml(submission.photo_url || "")}"></div>
+      </div>
+      <div class="player">${escapeHtml(submission.player)}</div>
+      <h3>${escapeHtml(submission.dish_name)}</h3>
+      <p>${escapeHtml(submission.description || "Let the food speak for itself.")}</p>
+    </article>
+  `).join("");
+
+  currentSubmissions.forEach(async submission => {
+    if (!submission.photo_url) return;
+
+    const url = TEST_MODE
+      ? submission.photo_url
+      : await createSignedPhotoUrl(submission.photo_url);
+
+    if (!url) return;
+
+    const slot = [...grid.querySelectorAll("[data-photo]")]
+      .find(el => el.dataset.photo === submission.photo_url);
+
+    if (slot) {
+      slot.innerHTML =
+        `<img class="reveal-photo" src="${url}" alt="${escapeHtml(submission.dish_name)}">`;
+    }
+  });
+}
+
+/* =========================================================
+   RATING
+========================================================= */
+
+const RATING_CRITERIA = [
+  ["taste", "Taste"],
+  ["creativity", "Creativity"],
+  ["ingredient_use", "Use of ingredient"],
+  ["presentation", "Presentation"]
+];
+
+function renderRating() {
+  const rows = $("ratingRows");
+  if (!rows) return;
+
+  rows.innerHTML = RATING_CRITERIA.map(([key, label]) => `
+    <div class="rating-row">
+      <div class="rating-label">${label}</div>
+      <div class="rating-buttons">
+        ${[1,2,3,4,5].map(value => `
+          <button
+            type="button"
+            class="rating-btn"
+            data-rating-key="${key}"
+            data-rating-value="${value}"
+          >${value}</button>
+        `).join("")}
+      </div>
+    </div>
+  `).join("");
+
+  rows.querySelectorAll(".rating-btn").forEach(button => {
+    button.addEventListener("click", () => {
+      const key = button.dataset.ratingKey;
+      selectedRatings[key] = Number(button.dataset.ratingValue);
+
+      rows.querySelectorAll(
+        `.rating-btn[data-rating-key="${key}"]`
+      ).forEach(btn => btn.classList.remove("selected"));
+
+      button.classList.add("selected");
+
+      updateRatingTotal();
+    });
+  });
+
+  updateRatingTotal();
+}
+
+function updateRatingTotal() {
+  const values = Object.values(selectedRatings);
+  const total = values.reduce((sum, value) => sum + (value || 0), 0);
+  setText($("ratingTotal"), total ? `${total}/20` : "—");
+}
+
+async function submitRating() {
+  const values = Object.values(selectedRatings);
+
+  if (values.some(value => !value)) {
+    setText($("ratingStatus"), "Give the other dish a score for every category.");
+    $("ratingStatus").classList.remove("hidden");
+    return;
+  }
+
+  const total = values.reduce((sum, value) => sum + value, 0);
+
+  if (TEST_MODE) {
+    currentRatings = [{
+      week_number: currentWeek,
+      rater: currentPlayer,
+      rated_player: currentPlayer === "Winnie" ? "Bookie" : "Winnie",
+      taste: selectedRatings.taste,
+      creativity: selectedRatings.creativity,
+      ingredient_use: selectedRatings.ingredient_use,
+      presentation: selectedRatings.presentation,
+      total
+    }];
+
+    setText(
+      $("ratingStatus"),
+      "Rating saved for the rehearsal. Nothing was sent to Supabase."
+    );
+    $("ratingStatus").classList.remove("hidden");
+    renderTestResults();
+    return;
+  }
+
+  const otherPlayer = currentPlayer === "Winnie" ? "Bookie" : "Winnie";
+
+  try {
+    await supabaseFetch("/rest/v1/potluck_ratings", {
+      method: "POST",
+      headers: { Prefer: "return=representation" },
+      body: JSON.stringify({
+        week_number: currentWeek,
+        rater: currentPlayer,
+        rated_player: otherPlayer,
+        taste: selectedRatings.taste,
+        creativity: selectedRatings.creativity,
+        ingredient_use: selectedRatings.ingredient_use,
+        presentation: selectedRatings.presentation,
+        total
+      })
+    });
+
+    setText($("ratingStatus"), "Rating submitted.");
+    $("ratingStatus").classList.remove("hidden");
+
+    await loadRealReveal();
+  } catch (error) {
+    setText($("ratingStatus"), error.message);
+    $("ratingStatus").classList.remove("hidden");
+  }
+}
+
+/* =========================================================
+   RESULTS
+========================================================= */
+
+function renderTestResults() {
+  const section = $("resultsSection");
+  const grid = $("resultsGrid");
+  const note = $("winnerNote");
+
+  if (!section || !grid) return;
+
+  show(section);
+
+  const myTotal =
+    currentRatings.find(r => r.rater === currentPlayer)?.total || null;
+
+  const otherPlayer = currentPlayer === "Winnie" ? "Bookie" : "Winnie";
+  const otherTotal = 17;
+
+  grid.innerHTML = `
+    <div class="result-card">
+      <div class="result-player">${escapeHtml(currentPlayer)}</div>
+      <div class="result-score">${myTotal ?? "—"}</div>
+      <div class="result-max">out of 20</div>
+    </div>
+    <div class="result-card">
+      <div class="result-player">${otherPlayer}</div>
+      <div class="result-score">${otherTotal}</div>
+      <div class="result-max">test score</div>
+    </div>
+  `;
+
+  setText(
+    note,
+    myTotal
+      ? "TEST RESULTS · This is rehearsal data only."
+      : "Submit your rating to complete the rehearsal."
+  );
+}
+
+function renderRealResults() {
+  const section = $("resultsSection");
+  const grid = $("resultsGrid");
+  const note = $("winnerNote");
+
+  if (!section || !grid || currentRatings.length < 2) return;
+
+  show(section);
+
+  const totals = { Winnie: 0, Bookie: 0 };
+
+  currentRatings.forEach(rating => {
+    totals[rating.rated_player] += Number(rating.total || 0);
+  });
+
+  grid.innerHTML = ["Winnie", "Bookie"].map(player => `
+    <div class="result-card">
+      <div class="result-player">${player}</div>
+      <div class="result-score">${totals[player]}</div>
+      <div class="result-max">out of 20</div>
+    </div>
+  `).join("");
+
+  if (totals.Winnie === totals.Bookie) {
+    note.textContent = "A tie. The kitchens remain undefeated.";
+  } else {
+    const higher = totals.Winnie > totals.Bookie ? "Winnie" : "Bookie";
+    note.textContent = `${higher} takes this week's kitchen score.`;
+  }
+}
+
+/* =========================================================
+   INITIALISATION
+========================================================= */
+
+async function initialiseApp() {
+  currentWeek = getWeekNumber();
+
+  setText(
+    $("playerPill"),
+    `Playing as ${currentPlayer}`
+  );
+
+  if (TEST_MODE) {
+    $("testBanner").style.display = "flex";
+    setText(
+      $("spinInstruction"),
+      `Test mode · ${getSpinnerForWeek(currentWeek)} spins this week.`
+    );
+    setText(
+      $("spinStatus"),
+      "This rehearsal does not touch the real game."
+    );
+    $("spinButton").disabled = false;
+  } else {
+    await loadCurrentWeek();
+  }
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  $("loginForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const button = $("loginButton");
+    const error = $("loginError");
+
+    button.disabled = true;
+    button.textContent = "Entering...";
+    error.classList.add("hidden");
+    error.textContent = "";
+
+    try {
+      await login(
+        $("email").value.trim(),
+        $("password").value
+      );
+
+      await completeLogin();
+    } catch (loginError) {
+      error.textContent = loginError.message;
+      error.classList.remove("hidden");
+    } finally {
+      button.disabled = false;
+      button.textContent = "Enter the kitchen";
+    }
+  });
+
+  $("logoutButton").addEventListener("click", () => logout(true));
+
+  $("spinButton").addEventListener("click", () => {
+    if (TEST_MODE) {
+      spinTest();
+    } else {
+      spinReal();
+    }
+  });
+
+  $("dishPhoto").addEventListener("change", previewPhoto);
+  $("submissionForm").addEventListener("submit", submitDish);
+  $("submitRatingButton").addEventListener("click", submitRating);
+
+  $("resetTestButton").addEventListener("click", resetTestKitchen);
+
+  showLogin();
+
+  if (await hasValidSession()) {
+    try {
+      await loadPlayerIdentity();
+      enterApp();
+      await initialiseApp();
+    } catch (error) {
+      logout(false);
+      showLogin();
+    }
+  }
+});
+</script>
+
+</body>
+</html>
